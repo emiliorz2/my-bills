@@ -1,4 +1,4 @@
-//app/api/processBill/text/route.ts
+// app/api/processBill/text/route.ts
 
 import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
@@ -28,9 +28,9 @@ Extrae la siguiente información de este gasto escrito en lenguaje natural:
   - HOUSEHOLD
   - EDUCATION
   - OTHER
-- Si es una factura, devuelve también los detalles de los productos (nombre, cantidad, precio unitario).
+- si aparece una fecha en el texto, devuelve "fecha": "2025-06-21T00:00:00.000Z" en formato ISO. Si no aparece, devuelve "fecha": null.
 
-Devuelve SOLO este objeto JSON con esta estructura en base a la información extraída:
+Devuelve SOLO este objeto JSON con esta estructura en base al texto proporcionado:
 
 {
   "total": 18900,
@@ -39,6 +39,7 @@ Devuelve SOLO este objeto JSON con esta estructura en base a la información ext
   "descripcion": "Compra de víveres",
   "tipo": "invoice",
   "categoria": "FOOD",
+  "fecha": "2025-06-21T00:00:00.000Z",
   "detalles": [
     {
       "product": "Leche",
@@ -87,11 +88,11 @@ Texto: ${message}
         sourceId: source.id,
         vendor: data.proveedor || null,
         description: data.descripcion,
-        date: new Date(),
+        date: data.fecha ? new Date(data.fecha) : new Date(),
         total: data.total,
         currency: data.moneda,
         expenseType: data.tipo,
-        category: data.categoria ?? 'OTHER', // fallback por si viene undefined
+        category: data.categoria ?? 'OTHER',
       },
     });
 

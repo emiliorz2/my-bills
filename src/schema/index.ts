@@ -27,6 +27,7 @@ export const ExpenseWithDetailsSchema = z.object({
       'EDUCATION',
       'OTHER',
     ])
-    .optional(), 
+    .optional(),
+fecha: z.string().datetime().nullable().optional(),
   detalles: z.array(InvoiceDetailSchema).optional(),
 });

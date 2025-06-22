@@ -43,9 +43,10 @@ Extrae la siguiente información de esta imagen de factura:
   - HOUSEHOLD
   - EDUCATION
   - OTHER
-- y si aplica, una lista de productos (nombre, cantidad, precio unitario)
+- si aplica, una lista de productos (nombre, cantidad, precio unitario)
+- fecha (opcional): si aparece, debes dar la fecha y la hora en formato datetime (ejemplo: "2025-06-21T00:00:00.000Z") si no se escifica la fecha debes devolver null
 
-Devuelve SOLO un JSON con esta estructura:
+Devuelve SOLO un JSON con esta estructura con la información extraída:
 
 {
   "total": 18900,
@@ -54,6 +55,7 @@ Devuelve SOLO un JSON con esta estructura:
   "descripcion": "Compra en supermercado",
   "tipo": "invoice",
   "categoria": "FOOD",
+  "fecha": "2025-06-21T00:00:00.000Z",
   "detalles": [
     { "product": "Leche", "quantity": 2, "unitPrice": 900 },
     { "product": "Pan", "quantity": 1, "unitPrice": 1200 }
@@ -105,7 +107,7 @@ Devuelve SOLO un JSON con esta estructura:
         sourceId: source.id,
         vendor: data.proveedor || null,
         description: data.descripcion,
-        date: new Date(),
+        date: data.fecha ? new Date(data.fecha) : new Date(),
         total: data.total,
         currency: data.moneda,
         expenseType: data.tipo,
@@ -128,6 +130,7 @@ Devuelve SOLO un JSON con esta estructura:
       success: true,
       data: {
         descripcion: expense.description,
+        date: expense.date.toISOString(),
         total: expense.total,
         moneda: expense.currency,
         tipo: expense.expenseType,
