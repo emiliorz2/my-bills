@@ -4,6 +4,7 @@
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
+import { useState } from 'react';
 
 interface Expense {
   id: number;
@@ -12,6 +13,7 @@ interface Expense {
   total: number;
   currency: string;
   expenseType: string;
+  category?: string;
   date: string;
   source: {
     type: string;
@@ -27,9 +29,26 @@ interface Expense {
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
+const CATEGORIES = [
+  'FOOD',
+  'TRANSPORT',
+  'MEDICAL',
+  'SERVICES',
+  'SUBSCRIPTIONS',
+  'INSTALLMENTS',
+  'ENTERTAINMENT',
+  'HOUSEHOLD',
+  'EDUCATION',
+  'OTHER',
+];
+
 export default function BillsPage() {
   const router = useRouter();
   const { data, error, isLoading, mutate } = useSWR('/api/expenses', fetcher);
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const handleEdit = (id: number) => {
     router.push(`/bills/${id}/edit`);
@@ -44,26 +63,86 @@ export default function BillsPage() {
 
     if (res.ok) {
       toast.success('Factura eliminada correctamente');
-      mutate(); // Refrescar lista después de borrar
+      mutate();
     } else {
       toast.error('Ocurrió un error al eliminar la factura.');
     }
   };
 
+  const filteredData = data?.data?.filter((gasto: Expense) => {
+    const matchCategory = categoryFilter ? gasto.category === categoryFilter : true;
+    const matchSearch = searchTerm
+      ? gasto.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        gasto.vendor?.toLowerCase().includes(searchTerm.toLowerCase())
+      : true;
+    const matchDate = (!startDate || new Date(gasto.date) >= new Date(startDate)) &&
+                      (!endDate || new Date(gasto.date) <= new Date(endDate));
+    return matchCategory && matchSearch && matchDate;
+  });
+
   return (
     <div className="relative min-h-screen p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold text-blue-700 mb-6">📄 Facturas registradas</h1>
+
+      <div className="mb-4 flex flex-wrap gap-4 items-end">
+        <div>
+          <label className="mr-2 font-medium">Filtrar por categoría:</label>
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="border border-gray-300 px-3 py-2 rounded-md"
+          >
+            <option value="">Todas</option>
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase()}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="mr-2 font-medium">Buscar:</label>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border border-gray-300 px-3 py-2 rounded-md"
+            placeholder="Proveedor o descripción"
+          />
+        </div>
+
+        <div>
+          <label className="mr-2 font-medium">Desde:</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border border-gray-300 px-3 py-2 rounded-md"
+          />
+        </div>
+
+        <div>
+          <label className="mr-2 font-medium">Hasta:</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border border-gray-300 px-3 py-2 rounded-md"
+          />
+        </div>
+      </div>
 
       {isLoading && <p className="text-gray-600">Cargando facturas...</p>}
       {error && <p className="text-red-600">❌ Error al cargar las facturas.</p>}
 
       {!isLoading && !error && (
         <>
-          {data?.data?.length === 0 ? (
+          {filteredData?.length === 0 ? (
             <p className="text-gray-500 text-center">No hay facturas registradas aún.</p>
           ) : (
             <ul className="space-y-6">
-              {data.data.map((gasto: Expense) => (
+              {filteredData.map((gasto: Expense) => (
                 <li
                   key={gasto.id}
                   className="border border-gray-200 rounded-xl p-5 shadow-sm bg-white hover:shadow-md transition"
@@ -78,6 +157,12 @@ export default function BillsPage() {
                   </div>
 
                   <p className="text-gray-700">{gasto.description}</p>
+
+                  {gasto.category && (
+                    <p className="text-sm text-blue-600 font-medium mt-1">
+                      Categoría: {gasto.category}
+                    </p>
+                  )}
 
                   <p className="text-xl font-bold text-green-600 mt-3">
                     {gasto.total.toLocaleString('es-CR', {

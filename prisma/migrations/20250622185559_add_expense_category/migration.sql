@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "ExpenseCategory" AS ENUM ('FOOD', 'TRANSPORT', 'MEDICAL', 'SERVICES', 'SUBSCRIPTIONS', 'INSTALLMENTS', 'ENTERTAINMENT', 'HOUSEHOLD', 'EDUCATION', 'OTHER');
+
+-- AlterTable
+ALTER TABLE "Expense" ADD COLUMN     "category" "ExpenseCategory";

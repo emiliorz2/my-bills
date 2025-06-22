@@ -3,23 +3,7 @@
 import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
-
-// Zod schema
-const InvoiceDetailSchema = z.object({
-  product: z.string(),
-  quantity: z.number().positive(),
-  unitPrice: z.number().positive(),
-});
-
-const ExpenseWithDetailsSchema = z.object({
-  total: z.number().positive(),
-  moneda: z.enum(['CRC', 'USD']),
-  proveedor: z.string().optional(),
-  descripcion: z.string(),
-  tipo: z.enum(['simple', 'invoice']),
-  detalles: z.array(InvoiceDetailSchema).optional(),
-});
+import { ExpenseWithDetailsSchema } from '@/src/schema';
 
 export async function POST(req: Request) {
   try {
@@ -33,9 +17,20 @@ Extrae la siguiente información de este gasto escrito en lenguaje natural:
 - proveedor o persona (si aplica)
 - descripción corta
 - tipo de gasto: 'simple' si es una frase como "5000 colones a la pulpería", o 'invoice' si parece una factura con múltiples productos.
+- categoría: una sola palabra en mayúsculas. Escoge de estas opciones:
+  - FOOD
+  - TRANSPORT
+  - MEDICAL
+  - SERVICES
+  - SUBSCRIPTIONS
+  - INSTALLMENTS
+  - ENTERTAINMENT
+  - HOUSEHOLD
+  - EDUCATION
+  - OTHER
 - Si es una factura, devuelve también los detalles de los productos (nombre, cantidad, precio unitario).
 
-Devuelve **únicamente** este objeto JSON con esta estructura en base a la información extraída del texto:
+Devuelve SOLO este objeto JSON con esta estructura en base a la información extraída:
 
 {
   "total": 18900,
@@ -43,6 +38,7 @@ Devuelve **únicamente** este objeto JSON con esta estructura en base a la infor
   "proveedor": "Supermercado XYZ",
   "descripcion": "Compra de víveres",
   "tipo": "invoice",
+  "categoria": "FOOD",
   "detalles": [
     {
       "product": "Leche",
@@ -95,10 +91,10 @@ Texto: ${message}
         total: data.total,
         currency: data.moneda,
         expenseType: data.tipo,
+        category: data.categoria ?? 'OTHER', // fallback por si viene undefined
       },
     });
 
-    // Si hay detalles y el tipo es factura, guardamos los productos
     if (data.tipo === 'invoice' && data.detalles?.length) {
       const detalles = data.detalles.map((item) => ({
         expenseId: expense.id,
@@ -110,32 +106,20 @@ Texto: ${message}
       await prisma.invoiceDetail.createMany({ data: detalles });
     }
 
-return NextResponse.json({
-  success: true,
-  data: {
-    descripcion: expense.description,
-    total: expense.total,
-    moneda: expense.currency,
-    tipo: expense.expenseType,
-    proveedor: expense.vendor,
-    detalles: data.tipo === 'invoice' ? data.detalles || [] : [],
-  },
-});  } catch (err) {
+    return NextResponse.json({
+      success: true,
+      data: {
+        descripcion: expense.description,
+        total: expense.total,
+        moneda: expense.currency,
+        tipo: expense.expenseType,
+        categoria: expense.category,
+        proveedor: expense.vendor,
+        detalles: data.tipo === 'invoice' ? data.detalles || [] : [],
+      },
+    });
+  } catch (err) {
     console.error('❌ ERROR en /processBill/text:', err);
     return NextResponse.json({ success: false, error: 'Error procesando texto' }, { status: 500 });
   }
-}
-
-
-// Métodos no permitidos
-export async function GET() {
-  return NextResponse.json({ success: false, error: 'Método GET no permitido' }, { status: 405 });
-}
-
-
-export async function PUT() {
-  return NextResponse.json({ success: false, error: 'Método PUT no permitido en esta ruta' }, { status: 405 });
-}
-export async function DELETE() {
-  return NextResponse.json({ success: false, error: 'Método DELETE no permitido en esta ruta' }, { status: 405 });
 }

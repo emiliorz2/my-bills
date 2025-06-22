@@ -1,5 +1,4 @@
-//app/api/expenses/route.ts
-//This file handles the API routes for managing expenses, including creating, retrieving, updating, and deleting expenses.
+// app/api/expenses/route.ts
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
@@ -27,6 +26,7 @@ export async function POST(request: Request) {
         total: expense.total,
         currency: expense.currency,
         expenseType: expense.expenseType,
+        category: expense.categoria || null,
       },
     });
 
@@ -53,6 +53,7 @@ export async function GET() {
     return NextResponse.json({ success: false, error: 'Error al obtener los gastos' }, { status: 500 });
   }
 }
+
 export async function DELETE(request: Request) {
   try {
     const { id } = await request.json();
@@ -68,7 +69,6 @@ export async function DELETE(request: Request) {
   }
 }
 
-//put
 export async function PUT(request: Request) {
   try {
     const { id, source, expense } = await request.json();
@@ -93,6 +93,7 @@ export async function PUT(request: Request) {
         total: expense.total,
         currency: expense.currency,
         expenseType: expense.expenseType,
+        category: expense.categoria || null,
       },
     });
 

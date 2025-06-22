@@ -1,24 +1,8 @@
 //app/api/processBill/bill-photo/route.ts
-
 import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
-
-const InvoiceDetailSchema = z.object({
-  product: z.string(),
-  quantity: z.number().positive(),
-  unitPrice: z.number().positive(),
-});
-
-const ExpenseWithDetailsSchema = z.object({
-  total: z.number().positive(),
-  moneda: z.enum(['CRC', 'USD']),
-  proveedor: z.string().optional(),
-  descripcion: z.string(),
-  tipo: z.enum(['simple', 'invoice']),
-  detalles: z.array(InvoiceDetailSchema).optional(),
-});
+import { ExpenseWithDetailsSchema } from '@/src/schema';
 
 export async function POST(req: Request) {
   try {
@@ -48,9 +32,20 @@ Extrae la siguiente información de esta imagen de factura:
 - proveedor o comercio (si aparece)
 - descripción corta del gasto
 - tipo: 'invoice' si hay varios productos, 'simple' si es solo un total
+- categoría: una palabra en mayúsculas. Usa solo una de estas opciones:
+  - FOOD
+  - TRANSPORT
+  - MEDICAL
+  - SERVICES
+  - SUBSCRIPTIONS
+  - INSTALLMENTS
+  - ENTERTAINMENT
+  - HOUSEHOLD
+  - EDUCATION
+  - OTHER
 - y si aplica, una lista de productos (nombre, cantidad, precio unitario)
 
-Devuelve SOLO un JSON con esta estructura basado en la información extraída de la imagen:
+Devuelve SOLO un JSON con esta estructura:
 
 {
   "total": 18900,
@@ -58,6 +53,7 @@ Devuelve SOLO un JSON con esta estructura basado en la información extraída de
   "proveedor": "Supermercado XYZ",
   "descripcion": "Compra en supermercado",
   "tipo": "invoice",
+  "categoria": "FOOD",
   "detalles": [
     { "product": "Leche", "quantity": 2, "unitPrice": 900 },
     { "product": "Pan", "quantity": 1, "unitPrice": 1200 }
@@ -77,7 +73,6 @@ Devuelve SOLO un JSON con esta estructura basado en la información extraída de
     const raw = completion.choices[0].message.content ?? '';
     console.log('🔍 GPT respuesta:', raw);
 
-    // ✅ Eliminar delimitadores Markdown si los hay
     const cleaned = raw.replace(/```json|```/g, '').trim();
 
     let parsedJSON;
@@ -114,6 +109,7 @@ Devuelve SOLO un JSON con esta estructura basado en la información extraída de
         total: data.total,
         currency: data.moneda,
         expenseType: data.tipo,
+        category: data.categoria,
       },
     });
 
@@ -135,6 +131,7 @@ Devuelve SOLO un JSON con esta estructura basado en la información extraída de
         total: expense.total,
         moneda: expense.currency,
         tipo: expense.expenseType,
+        categoria: expense.category,
         proveedor: expense.vendor,
         detalles: data.tipo === 'invoice' ? data.detalles || [] : [],
       },

@@ -23,6 +23,20 @@ enum Currency {
   CRC
   USD
 }
+
+enum ExpenseCategory {
+  FOOD
+  TRANSPORT
+  MEDICAL
+  SERVICES
+  SUBSCRIPTIONS
+  INSTALLMENTS
+  ENTERTAINMENT
+  HOUSEHOLD
+  EDUCATION
+  OTHER
+}
+
 // This schema defines the data model for a simple expense tracking application.
 
 model Source {
@@ -36,19 +50,22 @@ model Source {
 }
 
 model Expense {
-  id             Int       @id @default(autoincrement())
+  id             Int               @id @default(autoincrement())
   sourceId       Int
-  vendor         String?   @db.VarChar(100)
-  description    String    @db.VarChar(255)
+  vendor         String?           @db.VarChar(100)
+  description    String            @db.VarChar(255)
   date           DateTime
   total          Float
   currency       Currency
   expenseType    ExpenseType
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  source         Source    @relation(fields: [sourceId], references: [id])
+  category       ExpenseCategory?  
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  source         Source            @relation(fields: [sourceId], references: [id])
   invoiceDetails InvoiceDetail[]
 }
+
 
 model InvoiceDetail {
   id             Int       @id @default(autoincrement())

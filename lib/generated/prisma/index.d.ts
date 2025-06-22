@@ -56,6 +56,22 @@ export const Currency: {
 
 export type Currency = (typeof Currency)[keyof typeof Currency]
 
+
+export const ExpenseCategory: {
+  FOOD: 'FOOD',
+  TRANSPORT: 'TRANSPORT',
+  MEDICAL: 'MEDICAL',
+  SERVICES: 'SERVICES',
+  SUBSCRIPTIONS: 'SUBSCRIPTIONS',
+  INSTALLMENTS: 'INSTALLMENTS',
+  ENTERTAINMENT: 'ENTERTAINMENT',
+  HOUSEHOLD: 'HOUSEHOLD',
+  EDUCATION: 'EDUCATION',
+  OTHER: 'OTHER'
+};
+
+export type ExpenseCategory = (typeof ExpenseCategory)[keyof typeof ExpenseCategory]
+
 }
 
 export type SourceType = $Enums.SourceType
@@ -69,6 +85,10 @@ export const ExpenseType: typeof $Enums.ExpenseType
 export type Currency = $Enums.Currency
 
 export const Currency: typeof $Enums.Currency
+
+export type ExpenseCategory = $Enums.ExpenseCategory
+
+export const ExpenseCategory: typeof $Enums.ExpenseCategory
 
 /**
  * ##  Prisma Client ʲˢ
@@ -2290,6 +2310,7 @@ export namespace Prisma {
     total: number | null
     currency: $Enums.Currency | null
     expenseType: $Enums.ExpenseType | null
+    category: $Enums.ExpenseCategory | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2303,6 +2324,7 @@ export namespace Prisma {
     total: number | null
     currency: $Enums.Currency | null
     expenseType: $Enums.ExpenseType | null
+    category: $Enums.ExpenseCategory | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2316,6 +2338,7 @@ export namespace Prisma {
     total: number
     currency: number
     expenseType: number
+    category: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2343,6 +2366,7 @@ export namespace Prisma {
     total?: true
     currency?: true
     expenseType?: true
+    category?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2356,6 +2380,7 @@ export namespace Prisma {
     total?: true
     currency?: true
     expenseType?: true
+    category?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2369,6 +2394,7 @@ export namespace Prisma {
     total?: true
     currency?: true
     expenseType?: true
+    category?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2469,6 +2495,7 @@ export namespace Prisma {
     total: number
     currency: $Enums.Currency
     expenseType: $Enums.ExpenseType
+    category: $Enums.ExpenseCategory | null
     createdAt: Date
     updatedAt: Date
     _count: ExpenseCountAggregateOutputType | null
@@ -2501,6 +2528,7 @@ export namespace Prisma {
     total?: boolean
     currency?: boolean
     expenseType?: boolean
+    category?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     source?: boolean | SourceDefaultArgs<ExtArgs>
@@ -2517,6 +2545,7 @@ export namespace Prisma {
     total?: boolean
     currency?: boolean
     expenseType?: boolean
+    category?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     source?: boolean | SourceDefaultArgs<ExtArgs>
@@ -2531,6 +2560,7 @@ export namespace Prisma {
     total?: boolean
     currency?: boolean
     expenseType?: boolean
+    category?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     source?: boolean | SourceDefaultArgs<ExtArgs>
@@ -2545,11 +2575,12 @@ export namespace Prisma {
     total?: boolean
     currency?: boolean
     expenseType?: boolean
+    category?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ExpenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sourceId" | "vendor" | "description" | "date" | "total" | "currency" | "expenseType" | "createdAt" | "updatedAt", ExtArgs["result"]["expense"]>
+  export type ExpenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sourceId" | "vendor" | "description" | "date" | "total" | "currency" | "expenseType" | "category" | "createdAt" | "updatedAt", ExtArgs["result"]["expense"]>
   export type ExpenseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     source?: boolean | SourceDefaultArgs<ExtArgs>
     invoiceDetails?: boolean | Expense$invoiceDetailsArgs<ExtArgs>
@@ -2577,6 +2608,7 @@ export namespace Prisma {
       total: number
       currency: $Enums.Currency
       expenseType: $Enums.ExpenseType
+      category: $Enums.ExpenseCategory | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["expense"]>
@@ -3012,6 +3044,7 @@ export namespace Prisma {
     readonly total: FieldRef<"Expense", 'Float'>
     readonly currency: FieldRef<"Expense", 'Currency'>
     readonly expenseType: FieldRef<"Expense", 'ExpenseType'>
+    readonly category: FieldRef<"Expense", 'ExpenseCategory'>
     readonly createdAt: FieldRef<"Expense", 'DateTime'>
     readonly updatedAt: FieldRef<"Expense", 'DateTime'>
   }
@@ -4590,6 +4623,7 @@ export namespace Prisma {
     total: 'total',
     currency: 'currency',
     expenseType: 'expenseType',
+    category: 'category',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -4733,6 +4767,20 @@ export namespace Prisma {
    */
   export type ListEnumExpenseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseType[]'>
     
+
+
+  /**
+   * Reference to a field of type 'ExpenseCategory'
+   */
+  export type EnumExpenseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'ExpenseCategory[]'
+   */
+  export type ListEnumExpenseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseCategory[]'>
+    
   /**
    * Deep Input Types
    */
@@ -4807,6 +4855,7 @@ export namespace Prisma {
     total?: FloatFilter<"Expense"> | number
     currency?: EnumCurrencyFilter<"Expense"> | $Enums.Currency
     expenseType?: EnumExpenseTypeFilter<"Expense"> | $Enums.ExpenseType
+    category?: EnumExpenseCategoryNullableFilter<"Expense"> | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFilter<"Expense"> | Date | string
     updatedAt?: DateTimeFilter<"Expense"> | Date | string
     source?: XOR<SourceScalarRelationFilter, SourceWhereInput>
@@ -4822,6 +4871,7 @@ export namespace Prisma {
     total?: SortOrder
     currency?: SortOrder
     expenseType?: SortOrder
+    category?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     source?: SourceOrderByWithRelationInput
@@ -4840,6 +4890,7 @@ export namespace Prisma {
     total?: FloatFilter<"Expense"> | number
     currency?: EnumCurrencyFilter<"Expense"> | $Enums.Currency
     expenseType?: EnumExpenseTypeFilter<"Expense"> | $Enums.ExpenseType
+    category?: EnumExpenseCategoryNullableFilter<"Expense"> | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFilter<"Expense"> | Date | string
     updatedAt?: DateTimeFilter<"Expense"> | Date | string
     source?: XOR<SourceScalarRelationFilter, SourceWhereInput>
@@ -4855,6 +4906,7 @@ export namespace Prisma {
     total?: SortOrder
     currency?: SortOrder
     expenseType?: SortOrder
+    category?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ExpenseCountOrderByAggregateInput
@@ -4876,6 +4928,7 @@ export namespace Prisma {
     total?: FloatWithAggregatesFilter<"Expense"> | number
     currency?: EnumCurrencyWithAggregatesFilter<"Expense"> | $Enums.Currency
     expenseType?: EnumExpenseTypeWithAggregatesFilter<"Expense"> | $Enums.ExpenseType
+    category?: EnumExpenseCategoryNullableWithAggregatesFilter<"Expense"> | $Enums.ExpenseCategory | null
     createdAt?: DateTimeWithAggregatesFilter<"Expense"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Expense"> | Date | string
   }
@@ -5001,6 +5054,7 @@ export namespace Prisma {
     total: number
     currency: $Enums.Currency
     expenseType: $Enums.ExpenseType
+    category?: $Enums.ExpenseCategory | null
     createdAt?: Date | string
     updatedAt?: Date | string
     source: SourceCreateNestedOneWithoutExpensesInput
@@ -5016,6 +5070,7 @@ export namespace Prisma {
     total: number
     currency: $Enums.Currency
     expenseType: $Enums.ExpenseType
+    category?: $Enums.ExpenseCategory | null
     createdAt?: Date | string
     updatedAt?: Date | string
     invoiceDetails?: InvoiceDetailUncheckedCreateNestedManyWithoutExpenseInput
@@ -5028,6 +5083,7 @@ export namespace Prisma {
     total?: FloatFieldUpdateOperationsInput | number
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     expenseType?: EnumExpenseTypeFieldUpdateOperationsInput | $Enums.ExpenseType
+    category?: NullableEnumExpenseCategoryFieldUpdateOperationsInput | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     source?: SourceUpdateOneRequiredWithoutExpensesNestedInput
@@ -5043,6 +5099,7 @@ export namespace Prisma {
     total?: FloatFieldUpdateOperationsInput | number
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     expenseType?: EnumExpenseTypeFieldUpdateOperationsInput | $Enums.ExpenseType
+    category?: NullableEnumExpenseCategoryFieldUpdateOperationsInput | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceDetails?: InvoiceDetailUncheckedUpdateManyWithoutExpenseNestedInput
@@ -5057,6 +5114,7 @@ export namespace Prisma {
     total: number
     currency: $Enums.Currency
     expenseType: $Enums.ExpenseType
+    category?: $Enums.ExpenseCategory | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5068,6 +5126,7 @@ export namespace Prisma {
     total?: FloatFieldUpdateOperationsInput | number
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     expenseType?: EnumExpenseTypeFieldUpdateOperationsInput | $Enums.ExpenseType
+    category?: NullableEnumExpenseCategoryFieldUpdateOperationsInput | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5081,6 +5140,7 @@ export namespace Prisma {
     total?: FloatFieldUpdateOperationsInput | number
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     expenseType?: EnumExpenseTypeFieldUpdateOperationsInput | $Enums.ExpenseType
+    category?: NullableEnumExpenseCategoryFieldUpdateOperationsInput | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5326,6 +5386,13 @@ export namespace Prisma {
     not?: NestedEnumExpenseTypeFilter<$PrismaModel> | $Enums.ExpenseType
   }
 
+  export type EnumExpenseCategoryNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpenseCategory | EnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExpenseCategoryNullableFilter<$PrismaModel> | $Enums.ExpenseCategory | null
+  }
+
   export type SourceScalarRelationFilter = {
     is?: SourceWhereInput
     isNot?: SourceWhereInput
@@ -5350,6 +5417,7 @@ export namespace Prisma {
     total?: SortOrder
     currency?: SortOrder
     expenseType?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5369,6 +5437,7 @@ export namespace Prisma {
     total?: SortOrder
     currency?: SortOrder
     expenseType?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5382,6 +5451,7 @@ export namespace Prisma {
     total?: SortOrder
     currency?: SortOrder
     expenseType?: SortOrder
+    category?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5444,6 +5514,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumExpenseTypeFilter<$PrismaModel>
     _max?: NestedEnumExpenseTypeFilter<$PrismaModel>
+  }
+
+  export type EnumExpenseCategoryNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpenseCategory | EnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExpenseCategoryNullableWithAggregatesFilter<$PrismaModel> | $Enums.ExpenseCategory | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumExpenseCategoryNullableFilter<$PrismaModel>
+    _max?: NestedEnumExpenseCategoryNullableFilter<$PrismaModel>
   }
 
   export type ExpenseScalarRelationFilter = {
@@ -5589,6 +5669,10 @@ export namespace Prisma {
 
   export type EnumExpenseTypeFieldUpdateOperationsInput = {
     set?: $Enums.ExpenseType
+  }
+
+  export type NullableEnumExpenseCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.ExpenseCategory | null
   }
 
   export type SourceUpdateOneRequiredWithoutExpensesNestedInput = {
@@ -5791,6 +5875,13 @@ export namespace Prisma {
     not?: NestedEnumExpenseTypeFilter<$PrismaModel> | $Enums.ExpenseType
   }
 
+  export type NestedEnumExpenseCategoryNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpenseCategory | EnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExpenseCategoryNullableFilter<$PrismaModel> | $Enums.ExpenseCategory | null
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -5844,6 +5935,16 @@ export namespace Prisma {
     _max?: NestedEnumExpenseTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumExpenseCategoryNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExpenseCategory | EnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExpenseCategory[] | ListEnumExpenseCategoryFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExpenseCategoryNullableWithAggregatesFilter<$PrismaModel> | $Enums.ExpenseCategory | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumExpenseCategoryNullableFilter<$PrismaModel>
+    _max?: NestedEnumExpenseCategoryNullableFilter<$PrismaModel>
+  }
+
   export type ExpenseCreateWithoutSourceInput = {
     vendor?: string | null
     description: string
@@ -5851,6 +5952,7 @@ export namespace Prisma {
     total: number
     currency: $Enums.Currency
     expenseType: $Enums.ExpenseType
+    category?: $Enums.ExpenseCategory | null
     createdAt?: Date | string
     updatedAt?: Date | string
     invoiceDetails?: InvoiceDetailCreateNestedManyWithoutExpenseInput
@@ -5864,6 +5966,7 @@ export namespace Prisma {
     total: number
     currency: $Enums.Currency
     expenseType: $Enums.ExpenseType
+    category?: $Enums.ExpenseCategory | null
     createdAt?: Date | string
     updatedAt?: Date | string
     invoiceDetails?: InvoiceDetailUncheckedCreateNestedManyWithoutExpenseInput
@@ -5907,6 +6010,7 @@ export namespace Prisma {
     total?: FloatFilter<"Expense"> | number
     currency?: EnumCurrencyFilter<"Expense"> | $Enums.Currency
     expenseType?: EnumExpenseTypeFilter<"Expense"> | $Enums.ExpenseType
+    category?: EnumExpenseCategoryNullableFilter<"Expense"> | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFilter<"Expense"> | Date | string
     updatedAt?: DateTimeFilter<"Expense"> | Date | string
   }
@@ -6014,6 +6118,7 @@ export namespace Prisma {
     total: number
     currency: $Enums.Currency
     expenseType: $Enums.ExpenseType
+    category?: $Enums.ExpenseCategory | null
     createdAt?: Date | string
     updatedAt?: Date | string
     source: SourceCreateNestedOneWithoutExpensesInput
@@ -6028,6 +6133,7 @@ export namespace Prisma {
     total: number
     currency: $Enums.Currency
     expenseType: $Enums.ExpenseType
+    category?: $Enums.ExpenseCategory | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6055,6 +6161,7 @@ export namespace Prisma {
     total?: FloatFieldUpdateOperationsInput | number
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     expenseType?: EnumExpenseTypeFieldUpdateOperationsInput | $Enums.ExpenseType
+    category?: NullableEnumExpenseCategoryFieldUpdateOperationsInput | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     source?: SourceUpdateOneRequiredWithoutExpensesNestedInput
@@ -6069,6 +6176,7 @@ export namespace Prisma {
     total?: FloatFieldUpdateOperationsInput | number
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     expenseType?: EnumExpenseTypeFieldUpdateOperationsInput | $Enums.ExpenseType
+    category?: NullableEnumExpenseCategoryFieldUpdateOperationsInput | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6081,6 +6189,7 @@ export namespace Prisma {
     total: number
     currency: $Enums.Currency
     expenseType: $Enums.ExpenseType
+    category?: $Enums.ExpenseCategory | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6092,6 +6201,7 @@ export namespace Prisma {
     total?: FloatFieldUpdateOperationsInput | number
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     expenseType?: EnumExpenseTypeFieldUpdateOperationsInput | $Enums.ExpenseType
+    category?: NullableEnumExpenseCategoryFieldUpdateOperationsInput | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceDetails?: InvoiceDetailUpdateManyWithoutExpenseNestedInput
@@ -6105,6 +6215,7 @@ export namespace Prisma {
     total?: FloatFieldUpdateOperationsInput | number
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     expenseType?: EnumExpenseTypeFieldUpdateOperationsInput | $Enums.ExpenseType
+    category?: NullableEnumExpenseCategoryFieldUpdateOperationsInput | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoiceDetails?: InvoiceDetailUncheckedUpdateManyWithoutExpenseNestedInput
@@ -6118,6 +6229,7 @@ export namespace Prisma {
     total?: FloatFieldUpdateOperationsInput | number
     currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
     expenseType?: EnumExpenseTypeFieldUpdateOperationsInput | $Enums.ExpenseType
+    category?: NullableEnumExpenseCategoryFieldUpdateOperationsInput | $Enums.ExpenseCategory | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

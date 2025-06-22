@@ -42,6 +42,7 @@ export async function PUT(
         description: body.description,
         total: body.total,
         currency: body.currency,
+        category: body.categoria || null,
       },
     });
 
@@ -50,6 +51,7 @@ export async function PUT(
     return NextResponse.json({ success: false, message: 'Error al actualizar' }, { status: 500 });
   }
 }
+
 
 
 export async function DELETE(

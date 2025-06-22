@@ -12,7 +12,21 @@ interface Expense {
   description: string;
   total: number;
   currency: string;
+  categoria: string | null;
 }
+
+const CATEGORIES = [
+  'FOOD',
+  'TRANSPORT',
+  'MEDICAL',
+  'SERVICES',
+  'SUBSCRIPTIONS',
+  'INSTALLMENTS',
+  'ENTERTAINMENT',
+  'HOUSEHOLD',
+  'EDUCATION',
+  'OTHER',
+];
 
 export default function EditBillPage() {
   const { id } = useParams();
@@ -25,6 +39,7 @@ export default function EditBillPage() {
     description: '',
     total: '',
     currency: 'CRC',
+    category: '',
   });
 
   useEffect(() => {
@@ -39,6 +54,7 @@ export default function EditBillPage() {
           description: data.data.description,
           total: data.data.total.toString(),
           currency: data.data.currency || 'CRC',
+          category: data.data.category || '',
         });
       }
 
@@ -48,7 +64,7 @@ export default function EditBillPage() {
     fetchData();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -118,6 +134,23 @@ export default function EditBillPage() {
             onChange={handleChange}
             className="w-full border px-3 py-2 rounded-md"
           />
+        </div>
+
+        <div>
+          <label className="block font-semibold mb-1">Categoría</label>
+          <select
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded-md"
+          >
+            <option value="">Seleccione una categoría</option>
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button

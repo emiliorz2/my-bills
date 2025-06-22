@@ -79,7 +79,7 @@ function NavLinks() {
     <>
       <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium transition">Inicio</Link>
       <Link href="/bills" className="text-gray-700 hover:text-blue-600 font-medium transition">Facturas</Link>
-      <Link href="/reports" className="text-gray-700 hover:text-blue-600 font-medium transition">Reportes</Link>
+      <Link href="/analytics" className="text-gray-700 hover:text-blue-600 font-medium transition">Reportes</Link>
       <Link href="/settings" className="text-gray-700 hover:text-blue-600 font-medium transition">Configuración</Link>
     </>
   )
@@ -90,7 +90,7 @@ function MobileNavLinks({ onClick }: { onClick: () => void }) {
     <div className="flex flex-col space-y-3">
       <Link href="/" className="text-gray-800 hover:text-blue-600 font-medium" onClick={onClick}>Inicio</Link>
       <Link href="/bills" className="text-gray-800 hover:text-blue-600 font-medium" onClick={onClick}>Facturas</Link>
-      <Link href="/reports" className="text-gray-800 hover:text-blue-600 font-medium" onClick={onClick}>Reportes</Link>
+      <Link href="/analytics" className="text-gray-800 hover:text-blue-600 font-medium" onClick={onClick}>Reportes</Link>
       <Link href="/settings" className="text-gray-800 hover:text-blue-600 font-medium" onClick={onClick}>Configuración</Link>
     </div>
   )
