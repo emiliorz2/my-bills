@@ -1,0 +1,62 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SourceType {
+  message
+  image
+}
+
+enum ExpenseType {
+  simple
+  invoice
+}
+
+enum Currency {
+  CRC
+  USD
+}
+// This schema defines the data model for a simple expense tracking application.
+
+model Source {
+  id             Int       @id @default(autoincrement())
+  type           SourceType
+  description    String?   @db.VarChar(255)
+  receivedAt     DateTime
+  fileUrl        String?   @db.VarChar(512)
+
+  expenses       Expense[]
+}
+
+model Expense {
+  id             Int       @id @default(autoincrement())
+  sourceId       Int
+  vendor         String?   @db.VarChar(100)
+  description    String    @db.VarChar(255)
+  date           DateTime
+  total          Float
+  currency       Currency
+  expenseType    ExpenseType
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  source         Source    @relation(fields: [sourceId], references: [id])
+  invoiceDetails InvoiceDetail[]
+}
+
+model InvoiceDetail {
+  id             Int       @id @default(autoincrement())
+  expenseId      Int
+  product        String    @db.VarChar(100)
+  quantity       Int
+  unitPrice      Float
+
+  expense        Expense   @relation(fields: [expenseId], references: [id])
+}
+
