@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
 import { useState } from 'react';
+import {formatDateSafe} from '@/src/utils';
 
 interface Expense {
   id: number;
@@ -152,7 +153,7 @@ export default function BillsPage() {
                       {gasto.vendor || 'Proveedor desconocido'}
                     </h2>
                     <span className="text-sm text-gray-500">
-                      {new Date(gasto.date).toLocaleDateString()}
+                      {formatDateSafe(gasto.date)}
                     </span>
                   </div>
 
