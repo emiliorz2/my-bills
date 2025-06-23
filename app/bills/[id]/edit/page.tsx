@@ -89,8 +89,10 @@ export default function EditBillPage() {
   if (!expense) return <p className="p-6 text-red-600">Factura no encontrada</p>;
 
   return (
-    <main className="max-w-xl mx-auto p-6 bg-white rounded-xl shadow mt-6">
-      <h1 className="text-2xl font-bold text-primary mb-6">Editar Factura #{id}</h1>
+    <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('/globe.svg')] bg-repeat" />
+      <section className="relative max-w-xl mx-auto z-10 bg-white rounded-xl shadow p-6 space-y-4">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-primary text-center mb-4">Editar Factura #{id}</h1>
 
       <div className="space-y-4">
         <div>
@@ -160,6 +162,7 @@ export default function EditBillPage() {
           Guardar Cambios
         </button>
       </div>
+      </section>
     </main>
   );
 }

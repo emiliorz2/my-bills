@@ -44,28 +44,31 @@ export default function BillsPage() {
   });
 
   return (
-    <div className="relative min-h-screen p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-primary mb-6">📄 Facturas registradas</h1>
+    <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('/globe.svg')] bg-repeat" />
+      <section className="relative max-w-5xl mx-auto space-y-6 z-10">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-primary text-center">📄 Facturas registradas</h1>
 
-      <BillsFilters
-        category={categoryFilter}
-        onCategoryChange={setCategoryFilter}
-        search={searchTerm}
-        onSearchChange={setSearchTerm}
-        startDate={startDate}
-        onStartDateChange={setStartDate}
-        endDate={endDate}
-        onEndDateChange={setEndDate}
-      />
+        <BillsFilters
+          category={categoryFilter}
+          onCategoryChange={setCategoryFilter}
+          search={searchTerm}
+          onSearchChange={setSearchTerm}
+          startDate={startDate}
+          onStartDateChange={setStartDate}
+          endDate={endDate}
+          onEndDateChange={setEndDate}
+        />
 
-      {isLoading && <p className="text-gray-600">Cargando facturas...</p>}
-      {error && <p className="text-red-600">❌ Error al cargar las facturas.</p>}
+        {isLoading && <p className="text-gray-600">Cargando facturas...</p>}
+        {error && <p className="text-red-600">❌ Error al cargar las facturas.</p>}
 
-      {!isLoading && !error && (
-        <BillList bills={filteredData} onEdit={handleEdit} onDelete={handleDelete} />
-      )}
+        {!isLoading && !error && (
+          <BillList bills={filteredData} onEdit={handleEdit} onDelete={handleDelete} />
+        )}
 
-      <FloatingButton onClick={() => router.push('/new-bill')}>➕ Agregar Gasto</FloatingButton>
-    </div>
+        <FloatingButton onClick={() => router.push('/new-bill')}>➕ Agregar Gasto</FloatingButton>
+      </section>
+    </main>
   );
 }
