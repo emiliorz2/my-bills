@@ -1,5 +1,5 @@
-// app/bills/page.tsx
 'use client';
+// app/bills/page.tsx
 
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
