@@ -38,8 +38,9 @@ export default function BillsFilters({
   return (
     <div className="mb-4 flex flex-wrap gap-4 items-end">
       <div>
-        <label className="mr-2 font-medium">Filtrar por categoría:</label>
+        <label htmlFor="filter-category" className="mr-2 font-medium">Filtrar por categoría:</label>
         <select
+          id="filter-category"
           value={category}
           onChange={(e) => onCategoryChange(e.target.value)}
           className="border border-gray-300 px-3 py-2 rounded-md"
@@ -54,8 +55,9 @@ export default function BillsFilters({
       </div>
 
       <div>
-        <label className="mr-2 font-medium">Buscar:</label>
+        <label htmlFor="filter-search" className="mr-2 font-medium">Buscar:</label>
         <input
+          id="filter-search"
           type="text"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
@@ -65,8 +67,9 @@ export default function BillsFilters({
       </div>
 
       <div>
-        <label className="mr-2 font-medium">Desde:</label>
+        <label htmlFor="filter-from" className="mr-2 font-medium">Desde:</label>
         <input
+          id="filter-from"
           type="date"
           value={startDate}
           onChange={(e) => onStartDateChange(e.target.value)}
@@ -75,8 +78,9 @@ export default function BillsFilters({
       </div>
 
       <div>
-        <label className="mr-2 font-medium">Hasta:</label>
+        <label htmlFor="filter-to" className="mr-2 font-medium">Hasta:</label>
         <input
+          id="filter-to"
           type="date"
           value={endDate}
           onChange={(e) => onEndDateChange(e.target.value)}

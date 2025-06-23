@@ -81,7 +81,7 @@ export default function EditBillPage() {
     if (res.ok) {
       router.push('/bills');
     } else {
-      toast.error('❌ Ocurrió un error al actualizar la factura.');
+      toast.error('Ocurrió un error al actualizar la factura.', { icon: '❌' });
     }
   };
 

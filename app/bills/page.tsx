@@ -26,9 +26,9 @@ export default function BillsPage() {
 
     try {
       await deleteBill(id);
-      toast.success('Factura eliminada correctamente');
+      toast.success('Factura eliminada correctamente', { icon: '✅' });
     } catch {
-      toast.error('Ocurrió un error al eliminar la factura.');
+      toast.error('Ocurrió un error al eliminar la factura.', { icon: '❌' });
     }
   };
 
