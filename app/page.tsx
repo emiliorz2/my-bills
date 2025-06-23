@@ -1,5 +1,5 @@
-//app/page.tsx
 'use client';
+//app/page.tsx
 
 import MainContent from "@/components/MainContent";
 import useBills from "@/src/hooks/useBills";

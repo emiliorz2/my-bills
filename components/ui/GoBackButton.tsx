@@ -1,6 +1,5 @@
-//components/ui/GoBackButton.tsx
-
 'use client';
+//components/ui/GoBackButton.tsx
 
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';

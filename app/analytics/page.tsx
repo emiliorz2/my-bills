@@ -1,5 +1,5 @@
-// app/analytics/page.tsx
 'use client';
+// app/analytics/page.tsx
 
 import useSWR from 'swr';
 import { saveAs } from 'file-saver';
