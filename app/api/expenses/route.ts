@@ -2,9 +2,15 @@
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/route';
 
 export async function POST(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
+    }
     const body = await request.json();
     const { source, expense } = body;
 
@@ -20,6 +26,7 @@ export async function POST(request: Request) {
     const newExpense = await prisma.expense.create({
       data: {
         sourceId: newSource.id,
+        userId: (session.user as any).id,
         vendor: expense.vendor,
         description: expense.description,
         date: new Date(expense.date),
@@ -39,6 +46,10 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
+    }
     const expenses = await prisma.expense.findMany({
       orderBy: { date: 'desc' },
       include: {
@@ -56,6 +67,10 @@ export async function GET() {
 
 export async function DELETE(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
+    }
     const { id } = await request.json();
 
     const deletedExpense = await prisma.expense.delete({
@@ -71,6 +86,10 @@ export async function DELETE(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
+    }
     const { id, source, expense } = await request.json();
 
     const updatedSource = await prisma.source.update({
@@ -87,6 +106,7 @@ export async function PUT(request: Request) {
       where: { id },
       data: {
         sourceId: updatedSource.id,
+        userId: (session.user as any).id,
         vendor: expense.vendor,
         description: expense.description,
         date: new Date(expense.date),
