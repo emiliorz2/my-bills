@@ -121,7 +121,7 @@ Devuelve SOLO un JSON con esta estructura con la información extraída:
         currency: data.moneda,
         expenseType: data.tipo,
         category: data.categoria,
-        userId: session.user.id,
+        userId: +session.user.id,
       },
     });
 

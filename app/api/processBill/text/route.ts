@@ -102,7 +102,7 @@ Texto: ${message}
         currency: data.moneda,
         expenseType: data.tipo,
         category: data.categoria ?? 'OTHER',
-        userId: session.user.id,
+        userId: +session.user.id,
       },
     });
 
