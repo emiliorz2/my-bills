@@ -1,6 +1,5 @@
-//app/bills/[id]/edit/page.tsx
-
 'use client';
+//app/bills/[id]/edit/page.tsx
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';

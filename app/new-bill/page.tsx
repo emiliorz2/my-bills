@@ -1,6 +1,5 @@
-//app/new-bill/page.tsx
-
 'use client';
+//app/new-bill/page.tsx
 
 import { useState, DragEvent } from 'react';
 import { toast } from 'react-toastify';
