@@ -2,15 +2,15 @@
 
 import GoBackButton from '@/components/ui/GoBackButton';
 import { useState, useEffect } from 'react';
-import useBudget from '@/src/hooks/useBudget';
+import useSettings from '@/src/hooks/useSettings';
 
 export default function SettingsPage() {
-  const { budget, setBudget } = useBudget();
-  const [value, setValue] = useState(budget);
+  const { settings, saveSettings, isLoading } = useSettings();
+  const [value, setValue] = useState(settings?.monthlyBudget ?? 0);
 
   useEffect(() => {
-    setValue(budget);
-  }, [budget]);
+    if (settings) setValue(settings.monthlyBudget);
+  }, [settings]);
   const suggestions = [
     'Actualizar datos personales',
     'Preferencias de notificación',
@@ -45,8 +45,9 @@ export default function SettingsPage() {
             className="border border-gray-300 px-3 py-2 rounded-md w-full"
           />
           <button
-            className="px-4 py-2 bg-primary text-white rounded-md"
-            onClick={() => setBudget(value)}
+            className="px-4 py-2 bg-primary text-white rounded-md disabled:opacity-50"
+            onClick={() => saveSettings({ monthlyBudget: value })}
+            disabled={isLoading}
           >
             Guardar
           </button>
