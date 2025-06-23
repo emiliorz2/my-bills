@@ -87,8 +87,9 @@ export default function NewBillPage() {
     'max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md flex flex-col gap-6';
 
   return (
-    <main className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className={containerClass}>
+    <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden flex items-center justify-center">
+      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('/globe.svg')] bg-repeat" />
+      <div className={`${containerClass} relative z-10`}>
         <GoBackButton />
 
         <h1 className="text-2xl font-bold text-primary text-center">

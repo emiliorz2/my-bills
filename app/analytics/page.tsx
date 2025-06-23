@@ -39,17 +39,20 @@ export default function AnalyticsPage() {
   if (error) return <p className="p-6 text-red-600">Error al cargar datos</p>;
 
   return (
-    <div className="min-h-screen p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-primary mb-6">📊 Analítica</h1>
+    <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('/globe.svg')] bg-repeat" />
+      <section className="relative max-w-4xl mx-auto space-y-6 z-10">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-primary text-center">📊 Analítica</h1>
 
-      <button
-        onClick={handleExport}
-        className="mb-6 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md shadow"
-      >
-        📥 Exportar Excel
-      </button>
+        <button
+          onClick={handleExport}
+          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md shadow"
+        >
+          📥 Exportar Excel
+        </button>
 
-      <p className="text-gray-700">Exporta todos los gastos, detalles e ingresos asociados en un solo archivo Excel.</p>
-    </div>
+        <p className="text-gray-700">Exporta todos los gastos, detalles e ingresos asociados en un solo archivo Excel.</p>
+      </section>
+    </main>
   );
 }
