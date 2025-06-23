@@ -16,7 +16,7 @@ export default function MainContent() {
     if (!data || !data.success) return;
     const wb = XLSX.utils.book_new();
     Object.entries(data.data).forEach(([sheetName, rows]) => {
-      const ws = XLSX.utils.json_to_sheet(rows as any[]);
+      const ws = XLSX.utils.json_to_sheet(rows as unknown[]);
       XLSX.utils.book_append_sheet(wb, ws, sheetName);
     });
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });

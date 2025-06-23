@@ -28,7 +28,7 @@ export async function GET(
     }
 
     return NextResponse.json({ success: true, data: expense });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ success: false, message: 'Error interno' }, { status: 500 });
   }
 }
@@ -57,7 +57,7 @@ export async function PUT(
     });
 
     return NextResponse.json({ success: true, data: updated });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ success: false, message: 'Error al actualizar' }, { status: 500 });
   }
 }
@@ -103,8 +103,8 @@ export async function DELETE(
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('[DELETE /expenses/:id]', error);
+  } catch {
+    console.error('[DELETE /expenses/:id]');
     return NextResponse.json({ success: false, error: 'Error al eliminar la factura' }, { status: 500 });
   }
 }

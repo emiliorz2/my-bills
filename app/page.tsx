@@ -4,10 +4,12 @@
 import MainContent from "@/components/MainContent";
 import useBills from "@/src/hooks/useBills";
 import useUser from "@/src/hooks/useUser";
+import useBudget from "@/src/hooks/useBudget";
 
 export default function Home() {
   const { bills } = useBills();
   const { name } = useUser();
+  const { budget } = useBudget();
 
   const now = new Date();
   const monthlyBills = bills.filter((b) => {
@@ -21,7 +23,6 @@ export default function Home() {
     vendorTotals[vendor] = (vendorTotals[vendor] || 0) + b.total;
   });
   const topVendor = Object.entries(vendorTotals).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '-';
-  const budget = 250000;
   const progress = Math.min((totalThisMonth / budget) * 100, 100);
 
   return (
@@ -35,11 +36,15 @@ export default function Home() {
           <p className="text-gray-700 text-lg sm:text-xl">
             Gastos este mes: {totalThisMonth.toLocaleString('es-CR', { style: 'currency', currency: 'CRC' })} · Top proveedor: {topVendor}
           </p>
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+          <div className="relative w-full bg-gray-200 rounded-full h-4 mt-2 overflow-hidden">
             <div
-              className="bg-primary h-full rounded-full"
+              className="bg-primary h-full rounded-full transition-all"
               style={{ width: `${progress}%` }}
             />
+            <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-800">
+              {totalThisMonth.toLocaleString('es-CR', { style: 'currency', currency: 'CRC' })} /
+              {budget.toLocaleString('es-CR', { style: 'currency', currency: 'CRC' })}
+            </span>
           </div>
         </div>
         <MainContent />

@@ -7,6 +7,6 @@ export default function useUser() {
   return {
     name: session?.user?.name ?? null,
     email: session?.user?.email ?? null,
-    id: (session?.user as any)?.id,
+    id: (session?.user as { id?: string })?.id,
   }
 }

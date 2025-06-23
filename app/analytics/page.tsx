@@ -5,15 +5,6 @@ import useSWR from 'swr';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 
-interface Expense {
-  id: number;
-  vendor: string | null;
-  description: string;
-  total: number;
-  currency: string;
-  date: string;
-  category?: string;
-}
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -26,7 +17,7 @@ export default function AnalyticsPage() {
     const wb = XLSX.utils.book_new();
 
     Object.entries(data.data).forEach(([sheetName, rows]) => {
-      const ws = XLSX.utils.json_to_sheet(rows as any[]);
+      const ws = XLSX.utils.json_to_sheet(rows as unknown[]);
       XLSX.utils.book_append_sheet(wb, ws, sheetName);
     });
 

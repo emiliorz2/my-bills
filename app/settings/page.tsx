@@ -1,8 +1,16 @@
 'use client';
 
 import GoBackButton from '@/components/ui/GoBackButton';
+import { useState, useEffect } from 'react';
+import useBudget from '@/src/hooks/useBudget';
 
 export default function SettingsPage() {
+  const { budget, setBudget } = useBudget();
+  const [value, setValue] = useState(budget);
+
+  useEffect(() => {
+    setValue(budget);
+  }, [budget]);
   const suggestions = [
     'Actualizar datos personales',
     'Preferencias de notificación',
@@ -24,6 +32,26 @@ export default function SettingsPage() {
         A continuación se muestran algunas ideas de ajustes que podrías incluir
         en tu aplicación para mejorar la experiencia de usuario:
       </p>
+      <div className="space-y-2">
+        <label htmlFor="budget" className="font-medium text-gray-800 block">
+          Presupuesto mensual (CRC)
+        </label>
+        <div className="flex gap-2">
+          <input
+            id="budget"
+            type="number"
+            value={value}
+            onChange={(e) => setValue(parseInt(e.target.value))}
+            className="border border-gray-300 px-3 py-2 rounded-md w-full"
+          />
+          <button
+            className="px-4 py-2 bg-primary text-white rounded-md"
+            onClick={() => setBudget(value)}
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
       <ul className="list-disc pl-6 space-y-2 text-gray-800">
         {suggestions.map((item) => (
           <li key={item}>{item}</li>
