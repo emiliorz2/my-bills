@@ -4,9 +4,18 @@ import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { ExpenseWithDetailsSchema } from '@/src/schema';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]/route';
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: 'No autorizado' },
+        { status: 401 }
+      );
+    }
     const { message } = await req.json();
 
     const prompt = `
@@ -93,7 +102,7 @@ Texto: ${message}
         currency: data.moneda,
         expenseType: data.tipo,
         category: data.categoria ?? 'OTHER',
-        userId: 1, // Asumiendo un usuario por defecto, ajustar según tu lógica de autenticación
+        userId: session.user.id,
       },
     });
 

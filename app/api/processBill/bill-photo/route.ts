@@ -3,9 +3,18 @@ import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { ExpenseWithDetailsSchema } from '@/src/schema';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]/route';
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: 'No autorizado' },
+        { status: 401 }
+      );
+    }
     const formData = await req.formData();
     const file = formData.get('file') as File;
 
@@ -112,7 +121,7 @@ Devuelve SOLO un JSON con esta estructura con la información extraída:
         currency: data.moneda,
         expenseType: data.tipo,
         category: data.categoria,
-        userId: 1, // Asumiendo un usuario por defecto, ajustar según tu lógica de autenticación
+        userId: session.user.id,
       },
     });
 
