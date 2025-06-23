@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const newExpense = await prisma.expense.create({
       data: {
         sourceId: newSource.id,
-        userId: (session.user as any).id,
+        userId: (session.user as { id: number }).id,
         vendor: expense.vendor,
         description: expense.description,
         date: new Date(expense.date),
@@ -106,7 +106,7 @@ export async function PUT(request: Request) {
       where: { id },
       data: {
         sourceId: updatedSource.id,
-        userId: (session.user as any).id,
+        userId: (session.user as { id: number }).id,
         vendor: expense.vendor,
         description: expense.description,
         date: new Date(expense.date),
