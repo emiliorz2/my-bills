@@ -11,7 +11,7 @@ export default function GoBackButton() {
   return (
     <button
       onClick={() => router.back()}
-      className="flex items-center gap-2 text-sm text-blue-600 hover:underline mb-4"
+      className="flex items-center gap-2 text-sm text-primary hover:underline mb-4"
     >
       <ArrowLeft size={16} />
       Volver atrás

@@ -45,7 +45,7 @@ export default function BillsPage() {
 
   return (
     <div className="relative min-h-screen p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-blue-700 mb-6">📄 Facturas registradas</h1>
+      <h1 className="text-3xl font-bold text-primary mb-6">📄 Facturas registradas</h1>
 
       <BillsFilters
         category={categoryFilter}

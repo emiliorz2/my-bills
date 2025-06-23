@@ -20,7 +20,7 @@ export default function NavBar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
-              <span className="text-blue-600 font-extrabold text-lg">📊 MyBills</span>
+              <span className="text-primary font-extrabold text-lg">📊 MyBills</span>
             </div>
 
             <div className="hidden md:flex space-x-6">
@@ -50,7 +50,10 @@ export default function NavBar() {
 
       {/* Fondo oscuro */}
       {open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setOpen(false)} />
+        <div
+          className="fixed inset-0 bg-black/30 z-40"
+          onClick={() => setOpen(false)}
+        />
       )}
 
       {/* Menú móvil con animación deslizante */}
@@ -77,10 +80,10 @@ export default function NavBar() {
 function NavLinks() {
   return (
     <>
-      <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium transition">Inicio</Link>
-      <Link href="/bills" className="text-gray-700 hover:text-blue-600 font-medium transition">Facturas</Link>
-      <Link href="/analytics" className="text-gray-700 hover:text-blue-600 font-medium transition">Reportes</Link>
-      <Link href="/settings" className="text-gray-700 hover:text-blue-600 font-medium transition">Configuración</Link>
+      <Link href="/" className="text-gray-700 hover:text-primary font-medium transition">Inicio</Link>
+      <Link href="/bills" className="text-gray-700 hover:text-primary font-medium transition">Facturas</Link>
+      <Link href="/analytics" className="text-gray-700 hover:text-primary font-medium transition">Reportes</Link>
+      <Link href="/settings" className="text-gray-700 hover:text-primary font-medium transition">Configuración</Link>
     </>
   )
 }
@@ -88,10 +91,10 @@ function NavLinks() {
 function MobileNavLinks({ onClick }: { onClick: () => void }) {
   return (
     <div className="flex flex-col space-y-3">
-      <Link href="/" className="text-gray-800 hover:text-blue-600 font-medium" onClick={onClick}>Inicio</Link>
-      <Link href="/bills" className="text-gray-800 hover:text-blue-600 font-medium" onClick={onClick}>Facturas</Link>
-      <Link href="/analytics" className="text-gray-800 hover:text-blue-600 font-medium" onClick={onClick}>Reportes</Link>
-      <Link href="/settings" className="text-gray-800 hover:text-blue-600 font-medium" onClick={onClick}>Configuración</Link>
+      <Link href="/" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Inicio</Link>
+      <Link href="/bills" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Facturas</Link>
+      <Link href="/analytics" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Reportes</Link>
+      <Link href="/settings" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Configuración</Link>
     </div>
   )
 }
