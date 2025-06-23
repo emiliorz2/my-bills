@@ -4,12 +4,12 @@
 import MainContent from "@/components/MainContent";
 import useBills from "@/src/hooks/useBills";
 import useUser from "@/src/hooks/useUser";
-import useBudget from "@/src/hooks/useBudget";
+import useSettings from "@/src/hooks/useSettings";
 
 export default function Home() {
   const { bills } = useBills();
   const { name } = useUser();
-  const { budget } = useBudget();
+  const { settings } = useSettings();
 
   const now = new Date();
   const monthlyBills = bills.filter((b) => {
@@ -23,7 +23,8 @@ export default function Home() {
     vendorTotals[vendor] = (vendorTotals[vendor] || 0) + b.total;
   });
   const topVendor = Object.entries(vendorTotals).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '-';
-  const progress = Math.min((totalThisMonth / budget) * 100, 100);
+  const budget = settings?.monthlyBudget ?? 0;
+  const progress = budget > 0 ? Math.min((totalThisMonth / budget) * 100, 100) : 0;
 
   return (
     <main className="relative flex flex-col items-center justify-center min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">

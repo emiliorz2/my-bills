@@ -79,6 +79,16 @@ model InvoiceDetail {
   expense        Expense   @relation(fields: [expenseId], references: [id])
 }
 
+model Setting {
+  id               Int      @id @default(autoincrement())
+  userId           Int      @unique
+  preferredCurrency Currency
+  exchangeRate     Float?
+  monthlyBudget    Float
+
+  user             User     @relation(fields: [userId], references: [id])
+}
+
 model User {
   id        Int       @id @default(autoincrement())
   name      String?
@@ -90,6 +100,7 @@ model User {
   expenses  Expense[]
   accounts  Account[]
   sessions  Session[]
+  setting   Setting?
 }
 
 model Account {
