@@ -1,3 +1,5 @@
+import type { User } from './user'
+
 export interface InvoiceDetail {
   product: string;
   quantity: number;
@@ -13,6 +15,8 @@ export interface Source {
 
 export interface Expense {
   id: number;
+  userId: number;
+  user?: User;
   vendor: string | null;
   description: string;
   total: number;

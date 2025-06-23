@@ -3,7 +3,8 @@
 
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import BillList from '@/components/bills/BillList';
 import BillsFilters from '@/components/bills/BillsFilters';
 import FloatingButton from '@/components/ui/FloatingButton';
@@ -11,11 +12,18 @@ import useBills from '@/src/hooks/useBills';
 
 export default function BillsPage() {
   const router = useRouter();
+  const { status } = useSession();
   const { bills, error, isLoading, deleteBill } = useBills();
   const [categoryFilter, setCategoryFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login');
+    }
+  }, [status, router]);
 
   const handleEdit = (id: number) => {
     router.push(`/bills/${id}/edit`);
@@ -42,6 +50,10 @@ export default function BillsPage() {
                       (!endDate || new Date(gasto.date) <= new Date(endDate));
     return matchCategory && matchSearch && matchDate;
   });
+
+  if (status === 'loading') {
+    return <p className="p-6">Cargando...</p>;
+  }
 
   return (
     <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
