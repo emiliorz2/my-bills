@@ -30,7 +30,7 @@ export default function Home() {
       <section className="relative max-w-3xl text-center space-y-6 z-10">
         <div className="space-y-1">
           <h1 className="text-4xl sm:text-5xl font-extrabold text-primary">
-            Hola, {name} <span className="inline-block">👋</span>
+            Hola, {name ?? 'Usuario'} <span className="inline-block">👋</span>
           </h1>
           <p className="text-gray-700 text-lg sm:text-xl">
             Gastos este mes: {totalThisMonth.toLocaleString('es-CR', { style: 'currency', currency: 'CRC' })} · Top proveedor: {topVendor}

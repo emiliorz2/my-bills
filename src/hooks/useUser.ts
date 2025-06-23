@@ -1,6 +1,12 @@
-'use client';
+'use client'
+
+import { useSession } from 'next-auth/react'
 
 export default function useUser() {
-  // Placeholder for authenticated user information
-  return { name: 'Manuel Rojas' };
+  const { data: session } = useSession()
+  return {
+    name: session?.user?.name ?? null,
+    email: session?.user?.email ?? null,
+    id: (session?.user as any)?.id,
+  }
 }
