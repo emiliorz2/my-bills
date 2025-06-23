@@ -51,13 +51,13 @@ export default function NewBillPage() {
     setLoading(false);
 
     if (data.success) {
-      toast.success('Imagen procesada correctamente.', { icon: '✅' });
+      toast.success('Imagen procesada correctamente.');
       URL.revokeObjectURL(previewUrl!);
       setFile(null);
       setPreviewUrl(null);
       router.push('/bills');
     } else {
-      toast.error(data.error || 'Error al procesar la imagen.', { icon: '❌' });
+      toast.error(data.error || 'Error al procesar la imagen.');
     }
   };
 
@@ -76,11 +76,11 @@ export default function NewBillPage() {
     setLoading(false);
 
     if (data.success) {
-      toast.success('Gasto registrado correctamente.', { icon: '✅' });
+      toast.success('Gasto registrado correctamente.');
       setTextInput('');
       router.push('/bills');
     } else {
-      toast.error('Error al registrar el gasto.', { icon: '❌' });
+      toast.error('Error al registrar el gasto.');
     }
   };
 

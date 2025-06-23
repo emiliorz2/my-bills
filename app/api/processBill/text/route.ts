@@ -93,6 +93,7 @@ Texto: ${message}
         currency: data.moneda,
         expenseType: data.tipo,
         category: data.categoria ?? 'OTHER',
+        userId: 1, // Asumiendo un usuario por defecto, ajustar según tu lógica de autenticación
       },
     });
 
