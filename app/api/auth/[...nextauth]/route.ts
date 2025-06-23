@@ -19,12 +19,15 @@ export const authOptions: NextAuthOptions = {
         if (!user) return null
         const hashed = createHash('sha256').update(credentials.password).digest('hex')
         if (user.password !== hashed) return null
-        return user
+        return {
+          ...user,
+          id: user.id.toString(),
+        }
       },
     }),
   ],
   session: {
-    strategy: 'database',
+    strategy: 'jwt',
   },
   secret: process.env.NEXTAUTH_SECRET,
 }
