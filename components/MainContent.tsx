@@ -1,37 +1,54 @@
-// app/components/MainContent.tsx
 "use client";
-import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import useSWR from 'swr';
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export default function MainContent() {
-  const [started, setStarted] = useState(false);
   const router = useRouter();
+  const { data } = useSWR('/api/export', fetcher);
 
-  const baseButton =
-    'bg-primary hover:bg-primary/90 text-white font-medium rounded-lg px-6 py-3 transition duration-200 shadow-md hover:shadow-lg';
+  const handleExport = () => {
+    if (!data || !data.success) return;
+    const wb = XLSX.utils.book_new();
+    Object.entries(data.data).forEach(([sheetName, rows]) => {
+      const ws = XLSX.utils.json_to_sheet(rows as any[]);
+      XLSX.utils.book_append_sheet(wb, ws, sheetName);
+    });
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([wbout], { type: 'application/octet-stream' });
+    saveAs(blob, 'gastos_exportados.xlsx');
+  };
+
+  const actions = [
+    { title: 'Ingresar Factura', icon: '➕', action: () => router.push('/new-bill') },
+    { title: 'Ver Facturas', icon: '📄', action: () => router.push('/bills') },
+    { title: 'Reportes', icon: '📊', action: () => router.push('/analytics') },
+    { title: 'Exportar Datos', icon: '📤', action: handleExport },
+  ];
 
   return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4">
-      {!started ? (
-        <div className="text-center bg-white shadow-xl rounded-xl p-8">
-          <h1 className="text-4xl font-bold mb-6 text-gray-800">Bienvenido al sistema de facturación</h1>
-          <button className={`${baseButton} text-lg`} onClick={() => setStarted(true)}>
-            Iniciar
-          </button>
-        </div>
-      ) : (
-        <div className="text-center space-y-6 bg-white shadow-xl rounded-xl p-8">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">Seleccione una opción</h2>
-          <div className="flex flex-col items-center space-y-4">
-            <button className={baseButton} onClick={() => router.push('/new-bill')}>
-              Ingresar Factura
-            </button>
-            <button className={baseButton} onClick={() => router.push('/bills')}>
-              Ver Facturas
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+    <motion.section
+      className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      {actions.map(({ title, icon, action }) => (
+        <motion.div
+          key={title}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={action}
+          className="cursor-pointer select-none p-6 rounded-xl shadow-lg bg-white/60 backdrop-blur-md flex flex-col items-center justify-center space-y-2"
+        >
+          <span className="text-4xl">{icon}</span>
+          <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+        </motion.div>
+      ))}
+    </motion.section>
   );
 }
