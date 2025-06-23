@@ -1,18 +1,12 @@
 // app/api/expenses/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { prisma } from '@/lib/prisma'; 
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const id = parseInt(params.id);
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
-  }
 
   try {
     const expense = await prisma.expense.findUnique({
@@ -39,10 +33,6 @@ export async function PUT(
 ) {
   const id = parseInt(params.id);
   const body = await req.json();
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
-  }
 
   try {
     const updated = await prisma.expense.update({
@@ -69,10 +59,6 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
-    }
     const id = parseInt(params.id);
     if (isNaN(id)) {
       return NextResponse.json({ success: false, error: 'ID inválido' }, { status: 400 });

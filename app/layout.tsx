@@ -6,7 +6,6 @@ import "./globals.css";
 import NavBar from "@/components/NavBar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
-import { SessionProvider } from 'next-auth/react'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,10 +37,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} font-sans bg-secondary text-gray-900`}
       >
-        <SessionProvider>
-          <NavBar />
-          <main className="min-h-screen">{children}</main>
-        </SessionProvider>
+        <NavBar />
+        <main className="min-h-screen">{children}</main>
         <ToastContainer/>
       </body>
     </html>
