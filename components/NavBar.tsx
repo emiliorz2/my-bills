@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function NavBar() {
   const [open, setOpen] = useState(false)
@@ -78,23 +79,35 @@ export default function NavBar() {
 }
 
 function NavLinks() {
+  const { status } = useSession()
   return (
     <>
       <Link href="/" className="text-gray-700 hover:text-primary font-medium transition">Inicio</Link>
       <Link href="/bills" className="text-gray-700 hover:text-primary font-medium transition">Facturas</Link>
       <Link href="/analytics" className="text-gray-700 hover:text-primary font-medium transition">Reportes</Link>
       <Link href="/settings" className="text-gray-700 hover:text-primary font-medium transition">Configuración</Link>
+      {status === 'authenticated' ? (
+        <Link href="/logout" className="text-gray-700 hover:text-primary font-medium transition">Salir</Link>
+      ) : (
+        <Link href="/login" className="text-gray-700 hover:text-primary font-medium transition">Ingresar</Link>
+      )}
     </>
   )
 }
 
 function MobileNavLinks({ onClick }: { onClick: () => void }) {
+  const { status } = useSession()
   return (
     <div className="flex flex-col space-y-3">
       <Link href="/" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Inicio</Link>
       <Link href="/bills" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Facturas</Link>
       <Link href="/analytics" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Reportes</Link>
       <Link href="/settings" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Configuración</Link>
+      {status === 'authenticated' ? (
+        <Link href="/logout" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Salir</Link>
+      ) : (
+        <Link href="/login" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Ingresar</Link>
+      )}
     </div>
   )
 }

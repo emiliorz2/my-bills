@@ -8,6 +8,15 @@ export const InvoiceDetailSchema = z.object({
   unitPrice: z.number().positive(),
 });
 
+export const UserSchema = z.object({
+  id: z.number().int(),
+  name: z.string().nullable(),
+  email: z.string().email(),
+  password: z.string(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
 export const ExpenseWithDetailsSchema = z.object({
   total: z.number().positive(),
   moneda: z.enum(['CRC', 'USD']),
@@ -28,6 +37,6 @@ export const ExpenseWithDetailsSchema = z.object({
       'OTHER',
     ])
     .optional(),
-fecha: z.string().datetime().nullable().optional(),
+  fecha: z.string().datetime().nullable().optional(),
   detalles: z.array(InvoiceDetailSchema).optional(),
 });
