@@ -13,6 +13,7 @@ export default function NewBillPage() {
   const [dragOver, setDragOver] = useState(false);
   const [loading, setLoading] = useState(false);
   const [textInput, setTextInput] = useState('');
+  const [step, setStep] = useState<'method' | 'text' | 'image'>('method');
 
   const router = useRouter();
 
@@ -50,13 +51,13 @@ export default function NewBillPage() {
     setLoading(false);
 
     if (data.success) {
-      toast.success('✅ Imagen procesada correctamente.');
+      toast.success('Imagen procesada correctamente.', { icon: '✅' });
       URL.revokeObjectURL(previewUrl!);
       setFile(null);
       setPreviewUrl(null);
       router.push('/bills');
     } else {
-      toast.error(data.error || '❌ Error al procesar la imagen.');
+      toast.error(data.error || 'Error al procesar la imagen.', { icon: '❌' });
     }
   };
 
@@ -75,11 +76,11 @@ export default function NewBillPage() {
     setLoading(false);
 
     if (data.success) {
-      toast.success('✅ Gasto registrado correctamente.');
+      toast.success('Gasto registrado correctamente.', { icon: '✅' });
       setTextInput('');
       router.push('/bills');
     } else {
-      toast.error('❌ Error al registrar el gasto.');
+      toast.error('Error al registrar el gasto.', { icon: '❌' });
     }
   };
 
@@ -96,82 +97,113 @@ export default function NewBillPage() {
           Registrar Factura
         </h1>
 
-        {/* Entrada de texto */}
-        <div>
-          <h2 className="font-semibold text-gray-800 mb-2">Registrar por texto</h2>
-          <textarea
-            rows={4}
-            placeholder="Ej: 5000 colones a pulpería"
-            className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
-            value={textInput}
-            onChange={(e) => setTextInput(e.target.value)}
-          />
-          <button
-            className="mt-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded"
-            onClick={handleSubmitText}
-            disabled={loading || !textInput.trim()}
-          >
-            {loading ? 'Procesando...' : 'Procesar texto'}
-          </button>
-        </div>
-
-        {/* Subida o arrastre de imagen */}
-        <div>
-          <h2 className="font-semibold text-gray-800 mb-2">Subir o arrastrar imagen</h2>
-          <div
-            className={`w-full border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${
-              dragOver ? 'border-primary bg-primary/10' : 'border-gray-300'
-            }`}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setDragOver(true);
-            }}
-            onDragLeave={() => setDragOver(false)}
-            onDrop={handleDrop}
-            onClick={() => document.getElementById('fileInput')?.click()}
-          >
-            {file ? (
-              <p className="text-sm text-gray-600">
-                Archivo seleccionado: <strong>{file.name}</strong>
-              </p>
-            ) : (
-              <p className="text-sm text-gray-500">
-                Arrastra una imagen aquí o haz clic para seleccionar
-              </p>
-            )}
+        {step === 'method' && (
+          <div className="flex flex-col gap-4">
+            <button
+              className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-md"
+              onClick={() => setStep('text')}
+            >
+              Registrar por texto
+            </button>
+            <button
+              className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-md"
+              onClick={() => setStep('image')}
+            >
+              Subir o arrastrar imagen
+            </button>
           </div>
+        )}
 
-          {previewUrl && (
-            <div className="mt-3 text-center">
-              <p className="text-sm text-gray-600 mb-1">Vista previa:</p>
-              <img
-                src={previewUrl}
-                alt="Vista previa de la factura"
-                className="max-h-48 mx-auto rounded border"
-              />
+        {step === 'text' && (
+          <div>
+            <h2 className="font-semibold text-gray-800 mb-2">Registrar por texto</h2>
+            <textarea
+              rows={4}
+              placeholder="Ej: 5000 colones a pulpería"
+              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+            />
+            <button
+              className="mt-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded"
+              onClick={handleSubmitText}
+              disabled={loading || !textInput.trim()}
+            >
+              {loading ? 'Procesando...' : 'Procesar texto'}
+            </button>
+            <button
+              className="mt-2 text-sm text-primary underline"
+              onClick={() => setStep('method')}
+            >
+              Volver
+            </button>
+          </div>
+        )}
+
+        {step === 'image' && (
+          <div>
+            <h2 className="font-semibold text-gray-800 mb-2">Subir o arrastrar imagen</h2>
+            <div
+              className={`w-full border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${
+                dragOver ? 'border-primary bg-primary/10' : 'border-gray-300'
+              }`}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDragOver(true);
+              }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={handleDrop}
+              onClick={() => document.getElementById('fileInput')?.click()}
+            >
+              {file ? (
+                <p className="text-sm text-gray-600">
+                  Archivo seleccionado: <strong>{file.name}</strong>
+                </p>
+              ) : (
+                <p className="text-sm text-gray-500">
+                  Arrastra una imagen aquí o haz clic para seleccionar
+                </p>
+              )}
             </div>
-          )}
 
-          <input
-            id="fileInput"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-          />
+            {previewUrl && (
+              <div className="mt-3 text-center">
+                <p className="text-sm text-gray-600 mb-1">Vista previa:</p>
+                <img
+                  src={previewUrl}
+                  alt="Vista previa de la factura"
+                  className="max-h-48 mx-auto rounded border"
+                />
+              </div>
+            )}
 
-          <button
-            onClick={handleUpload}
-            disabled={!file || loading}
-            className={`mt-3 w-full px-4 py-2 rounded text-white font-medium transition ${
-              loading || !file
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-primary hover:bg-primary/90'
-            }`}
-          >
-            {loading ? 'Procesando...' : 'Subir y procesar'}
-          </button>
-        </div>
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+            />
+
+            <button
+              onClick={handleUpload}
+              disabled={!file || loading}
+              className={`mt-3 w-full px-4 py-2 rounded text-white font-medium transition ${
+                loading || !file
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-primary hover:bg-primary/90'
+              }`}
+            >
+              {loading ? 'Procesando...' : 'Subir y procesar'}
+            </button>
+            <button
+              className="mt-2 text-sm text-primary underline"
+              onClick={() => setStep('method')}
+            >
+              Volver
+            </button>
+          </div>
+        )}
       </div>
     </main>
   );
