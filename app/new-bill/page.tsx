@@ -91,7 +91,7 @@ export default function NewBillPage() {
       <div className={containerClass}>
         <GoBackButton />
 
-        <h1 className="text-2xl font-bold text-blue-700 text-center">
+        <h1 className="text-2xl font-bold text-primary text-center">
           Registrar Factura
         </h1>
 
@@ -101,12 +101,12 @@ export default function NewBillPage() {
           <textarea
             rows={4}
             placeholder="Ej: 5000 colones a pulpería"
-            className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
             value={textInput}
             onChange={(e) => setTextInput(e.target.value)}
           />
           <button
-            className="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded"
+            className="mt-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded"
             onClick={handleSubmitText}
             disabled={loading || !textInput.trim()}
           >
@@ -119,7 +119,7 @@ export default function NewBillPage() {
           <h2 className="font-semibold text-gray-800 mb-2">Subir o arrastrar imagen</h2>
           <div
             className={`w-full border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${
-              dragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+              dragOver ? 'border-primary bg-primary/10' : 'border-gray-300'
             }`}
             onDragOver={(e) => {
               e.preventDefault();
@@ -165,7 +165,7 @@ export default function NewBillPage() {
             className={`mt-3 w-full px-4 py-2 rounded text-white font-medium transition ${
               loading || !file
                 ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
+                : 'bg-primary hover:bg-primary/90'
             }`}
           >
             {loading ? 'Procesando...' : 'Subir y procesar'}

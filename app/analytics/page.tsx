@@ -40,7 +40,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="min-h-screen p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-blue-700 mb-6">📊 Analítica</h1>
+      <h1 className="text-3xl font-bold text-primary mb-6">📊 Analítica</h1>
 
       <button
         onClick={handleExport}

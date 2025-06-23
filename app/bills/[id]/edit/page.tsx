@@ -90,7 +90,7 @@ export default function EditBillPage() {
 
   return (
     <main className="max-w-xl mx-auto p-6 bg-white rounded-xl shadow mt-6">
-      <h1 className="text-2xl font-bold text-blue-700 mb-6">Editar Factura #{id}</h1>
+      <h1 className="text-2xl font-bold text-primary mb-6">Editar Factura #{id}</h1>
 
       <div className="space-y-4">
         <div>
@@ -155,7 +155,7 @@ export default function EditBillPage() {
 
         <button
           onClick={handleSubmit}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md mt-4 transition"
+          className="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-md mt-4 transition"
         >
           Guardar Cambios
         </button>

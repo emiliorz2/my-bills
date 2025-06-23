@@ -8,7 +8,7 @@ export default function MainContent() {
   const router = useRouter();
 
   const baseButton =
-    'bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-6 py-3 transition duration-200 shadow-md hover:shadow-lg';
+    'bg-primary hover:bg-primary/90 text-white font-medium rounded-lg px-6 py-3 transition duration-200 shadow-md hover:shadow-lg';
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4">

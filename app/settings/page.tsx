@@ -19,7 +19,7 @@ export default function SettingsPage() {
   return (
     <main className="max-w-2xl mx-auto p-6 space-y-6">
       <GoBackButton />
-      <h1 className="text-3xl font-bold text-blue-700">Configuración</h1>
+      <h1 className="text-3xl font-bold text-primary">Configuración</h1>
       <p className="text-gray-700">
         A continuación se muestran algunas ideas de ajustes que podrías incluir
         en tu aplicación para mejorar la experiencia de usuario:
