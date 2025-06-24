@@ -1,14 +1,19 @@
 // app/api/expenses/[id]/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import type { RouteHandlerContext } from 'next';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: RouteHandlerContext<{ id: string }>
 ) {
-  const id = parseInt(params.id);
+  const { id: idRaw } = await context.params;
+  const id = Number(idRaw);
+  if (isNaN(id)) {
+    return NextResponse.json({ success: false, message: 'ID inválido' }, { status: 400 });
+  }
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
@@ -35,11 +40,15 @@ export async function GET(
 }
 
 export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: RouteHandlerContext<{ id: string }>
 ) {
-  const id = parseInt(params.id);
-  const body = await req.json();
+  const { id: idRaw } = await context.params;
+  const id = Number(idRaw);
+  if (isNaN(id)) {
+    return NextResponse.json({ success: false, message: 'ID inválido' }, { status: 400 });
+  }
+  const body = await request.json();
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
@@ -73,15 +82,16 @@ export async function PUT(
 
 
 export async function DELETE(
-  _req: Request,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: RouteHandlerContext<{ id: string }>
 ) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
     }
-    const id = parseInt(params.id);
+    const { id: idRaw } = await context.params;
+    const id = Number(idRaw);
     const userId = Number((session.user as { id: string }).id);
     if (isNaN(id)) {
       return NextResponse.json({ success: false, error: 'ID inválido' }, { status: 400 });
