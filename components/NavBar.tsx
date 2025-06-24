@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
+
 
 export default function NavBar() {
   const [open, setOpen] = useState(false)
@@ -21,7 +23,17 @@ export default function NavBar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
-              <span className="text-primary font-extrabold text-lg">📊 MyBills</span>
+              <Link href="/">
+                <Image
+                  src="/IA-Budget.png"
+                  alt="IA-Budget Logo"
+                  width={32}
+                  height={32}
+                  className="h-8 w-auto mr-2"
+                  style={{ display: 'inline-block', verticalAlign: 'middle' }}
+                  priority
+                />
+              </Link>
             </div>
 
             <div className="hidden md:flex space-x-6">
@@ -59,9 +71,8 @@ export default function NavBar() {
 
       {/* Menú móvil con animación deslizante */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
-          open ? 'translate-x-0' : 'translate-x-full'
-        } md:hidden`}
+        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${open ? 'translate-x-0' : 'translate-x-full'
+          } md:hidden`}
       >
         <div className="flex justify-end p-4">
           <button onClick={() => setOpen(false)} aria-label="Cerrar">
