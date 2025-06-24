@@ -24,8 +24,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "My Bills",
-  description: "Track your bills and manage your finances with ease.",
+  title: "IA-Budget",
+  description: "Aplicación de gestión de gastos con IA",
 };
 
 export default function RootLayout({
