@@ -34,6 +34,7 @@ export async function PUT(request: Request) {
     } as Record<string, unknown>
     if (exchangeRate !== undefined) createData.exchangeRate = exchangeRate
 
+
     const updated = await prisma.setting.upsert({ 
       where: { userId },
       update: updateData,
