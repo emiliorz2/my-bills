@@ -8,7 +8,7 @@ export async function GET() {
   if (!session) {
     return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 })
   }
-  const userId = (session.user as { id: number }).id
+  const userId = Number((session.user as { id: string }).id)
   const setting = await prisma.setting.findUnique({ where: { userId } })
   return NextResponse.json({ success: true, data: setting })
 }
@@ -19,7 +19,7 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 })
   }
   const body = await request.json()
-  const userId = (session.user as { id: number }).id
+  const userId = Number((session.user as { id: string }).id)
   const { preferredCurrency, exchangeRate, monthlyBudget } = body
   try {
     const updated = await prisma.setting.upsert({
