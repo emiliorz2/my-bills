@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@/lib/generated/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]/route'
 
@@ -22,16 +23,16 @@ export async function PUT(request: Request) {
   const userId = Number((session.user as { id: string }).id)
   const { preferredCurrency, exchangeRate, monthlyBudget } = body
   try {
-    const updateData: Record<string, unknown> = {}
+    const updateData: Prisma.SettingUncheckedUpdateInput = {}
     if (preferredCurrency !== undefined) updateData.preferredCurrency = preferredCurrency
     if (exchangeRate !== undefined) updateData.exchangeRate = exchangeRate
     if (monthlyBudget !== undefined) updateData.monthlyBudget = monthlyBudget
 
-    const createData = {
+    const createData: Prisma.SettingUncheckedCreateInput = {
       userId,
       preferredCurrency: preferredCurrency ?? 'CRC',
       monthlyBudget: monthlyBudget ?? 0,
-    } as Record<string, unknown>
+    }
     if (exchangeRate !== undefined) createData.exchangeRate = exchangeRate
 
 
