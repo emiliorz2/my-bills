@@ -5,3 +5,4 @@ declare module 'next' {
     params: Promise<P>
   }
 }
+
