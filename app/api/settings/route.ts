@@ -22,10 +22,22 @@ export async function PUT(request: Request) {
   const userId = Number((session.user as { id: string }).id)
   const { preferredCurrency, exchangeRate, monthlyBudget } = body
   try {
+    const updateData: Record<string, unknown> = {}
+    if (preferredCurrency !== undefined) updateData.preferredCurrency = preferredCurrency
+    if (exchangeRate !== undefined) updateData.exchangeRate = exchangeRate
+    if (monthlyBudget !== undefined) updateData.monthlyBudget = monthlyBudget
+
+    const createData = {
+      userId,
+      preferredCurrency: preferredCurrency ?? 'CRC',
+      monthlyBudget: monthlyBudget ?? 0,
+    } as Record<string, unknown>
+    if (exchangeRate !== undefined) createData.exchangeRate = exchangeRate
+
     const updated = await prisma.setting.upsert({
       where: { userId },
-      update: { preferredCurrency, exchangeRate, monthlyBudget },
-      create: { userId, preferredCurrency, exchangeRate, monthlyBudget },
+      update: updateData,
+      create: createData,
     })
     return NextResponse.json({ success: true, data: updated })
   } catch (error) {

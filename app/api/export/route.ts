@@ -1,13 +1,23 @@
 // app/api/export/route.ts
 
-import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma'
+import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../auth/[...nextauth]/route'
 
 export async function GET() {
+  const session = await getServerSession(authOptions)
+  if (!session) {
+    return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 })
+  }
+  const userId = Number((session.user as { id: string }).id)
   try {
-    const expenses = await prisma.expense.findMany();
-    const invoiceDetails = await prisma.invoiceDetail.findMany();
-    const sources = await prisma.source.findMany();
+    const expenses = await prisma.expense.findMany({
+      where: { userId },
+      include: { invoiceDetails: true, source: true },
+    })
+    const invoiceDetails = expenses.flatMap(e => e.invoiceDetails)
+    const sources = expenses.map(e => e.source)
 
     return NextResponse.json({
       success: true,
