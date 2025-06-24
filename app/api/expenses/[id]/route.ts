@@ -10,7 +10,8 @@ export async function GET(
   context: RouteHandlerContext<{ id: string }>
 ) {
 
-  const id = Number(context.params.id);
+  const { id: idRaw } = await context.params;
+  const id = Number(idRaw);
   if (isNaN(id)) {
     return NextResponse.json({ success: false, message: 'ID inválido' }, { status: 400 });
   }
@@ -45,7 +46,8 @@ export async function PUT(
   context: RouteHandlerContext<{ id: string }>
 ) {
 
-  const id = Number(context.params.id);
+  const { id: idRaw } = await context.params;
+  const id = Number(idRaw);
   if (isNaN(id)) {
     return NextResponse.json({ success: false, message: 'ID inválido' }, { status: 400 });
   }
@@ -92,8 +94,8 @@ export async function DELETE(
     if (!session) {
       return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
     }
-
-    const id = Number(context.params.id);
+    const { id: idRaw } = await context.params;
+    const id = Number(idRaw);
 
     const userId = Number((session.user as { id: string }).id);
     if (isNaN(id)) {
