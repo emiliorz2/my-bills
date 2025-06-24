@@ -13,10 +13,11 @@ export async function GET(
   if (!session) {
     return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
   }
+  const userId = Number((session.user as { id: string }).id);
 
   try {
-    const expense = await prisma.expense.findUnique({
-      where: { id },
+    const expense = await prisma.expense.findFirst({
+      where: { id, userId },
       include: {
         invoiceDetails: true,
         source: true,
@@ -43,10 +44,11 @@ export async function PUT(
   if (!session) {
     return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
   }
+  const userId = Number((session.user as { id: string }).id);
 
   try {
-    const updated = await prisma.expense.update({
-      where: { id },
+    const updated = await prisma.expense.updateMany({
+      where: { id, userId },
       data: {
         vendor: body.vendor,
         description: body.description,
@@ -56,7 +58,13 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json({ success: true, data: updated });
+    if (updated.count === 0) {
+      return NextResponse.json({ success: false, message: 'No encontrado' }, { status: 404 });
+    }
+
+    const refreshed = await prisma.expense.findFirst({ where: { id, userId }, include: { invoiceDetails: true, source: true } })
+
+    return NextResponse.json({ success: true, data: refreshed });
   } catch {
     return NextResponse.json({ success: false, message: 'Error al actualizar' }, { status: 500 });
   }
@@ -74,23 +82,21 @@ export async function DELETE(
       return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
     }
     const id = parseInt(params.id);
+    const userId = Number((session.user as { id: string }).id);
     if (isNaN(id)) {
       return NextResponse.json({ success: false, error: 'ID inválido' }, { status: 400 });
+    }
+
+    const expense = await prisma.expense.findFirst({ where: { id, userId } });
+
+    if (!expense) {
+      return NextResponse.json({ success: false, error: 'Factura no encontrada' }, { status: 404 });
     }
 
     // 1. Eliminar detalles de la factura primero
     await prisma.invoiceDetail.deleteMany({
       where: { expenseId: id },
     });
-
-    // 2. Obtener el gasto para conocer el sourceId
-    const expense = await prisma.expense.findUnique({
-      where: { id },
-    });
-
-    if (!expense) {
-      return NextResponse.json({ success: false, error: 'Factura no encontrada' }, { status: 404 });
-    }
 
     // 3. Eliminar el gasto
     await prisma.expense.delete({
