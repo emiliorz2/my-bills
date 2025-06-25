@@ -1,4 +1,6 @@
 // app/api/processBill/text/route.ts
+//
+// Usado por: app/new-bill/page.tsx
 
 import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
@@ -7,8 +9,10 @@ import { ExpenseWithDetailsSchema } from '@/src/schema';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
 
+// Procesa un mensaje de texto con OpenAI y registra el gasto
 export async function POST(req: Request) {
   try {
+    // Verifica autenticación
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json(
@@ -16,6 +20,7 @@ export async function POST(req: Request) {
         { status: 401 }
       );
     }
+
     const { message } = await req.json();
 
     const prompt = `
@@ -66,16 +71,19 @@ Devuelve SOLO este objeto JSON con esta estructura en base al texto proporcionad
 Texto: ${message}
 `;
 
+    // Envía el texto a OpenAI para extraer la información
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0,
     });
 
+    // Texto devuelto por OpenAI
     const raw = completion.choices[0].message.content ?? '';
     console.log('🔍 Respuesta cruda de OpenAI:', raw);
 
     const parsedJSON = JSON.parse(raw);
+    // Valida el esquema recibido
     const result = ExpenseWithDetailsSchema.safeParse(parsedJSON);
     if (!result.success) {
       console.warn('❌ Error de validación Zod:', result.error);
@@ -84,6 +92,7 @@ Texto: ${message}
 
     const data = result.data;
 
+    // Crea el registro de origen tipo mensaje
     const source = await prisma.source.create({
       data: {
         type: 'message',
@@ -92,6 +101,7 @@ Texto: ${message}
       },
     });
 
+    // Guarda el gasto en la base de datos
     const expense = await prisma.expense.create({
       data: {
         sourceId: source.id,
@@ -131,6 +141,7 @@ Texto: ${message}
     });
   } catch (err) {
     console.error('❌ ERROR en /processBill/text:', err);
+    // Error inesperado al procesar el mensaje
     return NextResponse.json({ success: false, error: 'Error procesando texto' }, { status: 500 });
   }
 }

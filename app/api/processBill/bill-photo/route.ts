@@ -1,4 +1,6 @@
 //app/api/processBill/bill-photo/route.ts
+//
+// Usado por: app/new-bill/page.tsx
 import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
@@ -6,8 +8,10 @@ import { ExpenseWithDetailsSchema } from '@/src/schema';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
 
+// Procesa una imagen de factura con OpenAI y guarda el gasto
 export async function POST(req: Request) {
   try {
+    // Verifica autenticación
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json(
@@ -15,6 +19,8 @@ export async function POST(req: Request) {
         { status: 401 }
       );
     }
+
+    // Extrae la imagen enviada en el formulario
     const formData = await req.formData();
     const file = formData.get('file') as File;
 
@@ -22,9 +28,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: 'No se proporcionó imagen' }, { status: 400 });
     }
 
+    // Convierte la imagen a base64 para enviarla a OpenAI
     const bytes = await file.arrayBuffer();
     const base64 = Buffer.from(bytes).toString('base64');
 
+    // Solicita a OpenAI que extraiga los datos de la factura
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
@@ -81,9 +89,11 @@ Devuelve SOLO un JSON con esta estructura con la información extraída:
       ],
     });
 
+    // Respuesta en texto de OpenAI
     const raw = completion.choices[0].message.content ?? '';
     console.log('🔍 GPT respuesta:', raw);
 
+    // Limpia delimitadores de código
     const cleaned = raw.replace(/```json|```/g, '').trim();
 
     let parsedJSON;
@@ -91,9 +101,13 @@ Devuelve SOLO un JSON con esta estructura con la información extraída:
       parsedJSON = JSON.parse(cleaned);
     } catch (err) {
       console.error('❌ JSON malformado:', err, cleaned);
-      return NextResponse.json({ success: false, error: 'Formato de respuesta inválido del modelo' }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: 'Formato de respuesta inválido del modelo' },
+        { status: 500 }
+      );
     }
 
+    // Valida la estructura recibida
     const result = ExpenseWithDetailsSchema.safeParse(parsedJSON);
     if (!result.success) {
       console.warn('❌ Validación fallida:', result.error);
@@ -102,6 +116,7 @@ Devuelve SOLO un JSON con esta estructura con la información extraída:
 
     const data = result.data;
 
+    // Guarda el origen (imagen) en la base de datos
     const source = await prisma.source.create({
       data: {
         type: 'image',
@@ -111,6 +126,7 @@ Devuelve SOLO un JSON con esta estructura con la información extraída:
       },
     });
 
+    // Crea el gasto utilizando los datos procesados
     const expense = await prisma.expense.create({
       data: {
         sourceId: source.id,
@@ -151,6 +167,7 @@ Devuelve SOLO un JSON con esta estructura con la información extraída:
     });
   } catch (err) {
     console.error('❌ ERROR al procesar factura:', err);
+    // Algo salió mal durante el procesamiento
     return NextResponse.json({ success: false, error: 'Error procesando la imagen' }, { status: 500 });
   }
 }
