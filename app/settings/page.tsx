@@ -3,6 +3,7 @@
 import GoBackButton from '@/components/ui/GoBackButton';
 import { useState, useEffect } from 'react';
 import useSettings from '@/src/hooks/useSettings';
+import { toast } from 'react-toastify';
 
 export default function SettingsPage() {
   const { settings, saveSettings, isLoading } = useSettings();
@@ -29,12 +30,17 @@ export default function SettingsPage() {
     'Eliminar cuenta o limpiar datos',
   ];
 
-  const handleSave = () => {
-    saveSettings({
-      monthlyBudget: budget,
-      preferredCurrency: currency,
-      exchangeRate: rate,
-    });
+  const handleSave = async () => {
+    try {
+      await saveSettings({
+        monthlyBudget: budget,
+        preferredCurrency: currency,
+        exchangeRate: rate,
+      });
+      toast.success('Cambios guardados');
+    } catch {
+      toast.error('Error al guardar la configuración');
+    }
   };
 
   return (
@@ -83,7 +89,7 @@ export default function SettingsPage() {
           />
         </div>
         <button
-          className="px-4 py-2 bg-primary text-white rounded-md disabled:opacity-50"
+          className="px-4 py-2 bg-primary text-white rounded-md disabled:opacity-50 hover:bg-primary/90 active:scale-95 transition-transform"
           onClick={handleSave}
           disabled={isLoading}
         >
