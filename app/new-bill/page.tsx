@@ -2,6 +2,7 @@
 //app/new-bill/page.tsx
 
 import { useState, DragEvent } from 'react';
+import { useSWRConfig } from 'swr';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import GoBackButton from '@/components/ui/GoBackButton';
@@ -15,6 +16,7 @@ export default function NewBillPage() {
   const [step, setStep] = useState<'method' | 'text' | 'image'>('method');
 
   const router = useRouter();
+  const { mutate } = useSWRConfig();
 
   const handleFileChange = (file: File | null) => {
     setFile(file);
@@ -54,6 +56,7 @@ export default function NewBillPage() {
       URL.revokeObjectURL(previewUrl!);
       setFile(null);
       setPreviewUrl(null);
+      await mutate('/api/expenses');
       router.push('/bills');
     } else {
       toast.error(data.error || 'Error al procesar la imagen.');
@@ -77,6 +80,7 @@ export default function NewBillPage() {
     if (data.success) {
       toast.success('Gasto registrado correctamente.');
       setTextInput('');
+      await mutate('/api/expenses');
       router.push('/bills');
     } else {
       toast.error('Error al registrar el gasto.');
