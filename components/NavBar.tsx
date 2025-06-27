@@ -1,12 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, []);
 
   return (
     <>
@@ -53,14 +62,18 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Backdrop mobile */}
+      {/* Overlay */}
       {open && (
-        <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setOpen(false)} />
+        <button
+          onClick={() => setOpen(false)}
+          aria-hidden
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 ease-out z-40"
+        />
       )}
 
-      {/* Mobile menu */}
-      <div
-        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${open ? 'translate-x-0' : 'translate-x-full'} md:hidden`}
+      {/* Panel */}
+      <nav
+        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform transition-[transform,opacity] duration-300 ease-out ${open ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'} overflow-y-auto`}
       >
         <div className="flex justify-end p-4">
           <button onClick={() => setOpen(false)} aria-label="Cerrar">
@@ -72,13 +85,14 @@ export default function Header() {
         <div className="px-6 py-4 space-y-4">
           <MobileNavLinks onClick={() => setOpen(false)} />
         </div>
-      </div>
+      </nav>
     </>
   );
 }
 
 function NavLinks() {
   const { status } = useSession();
+  const pathname = usePathname();
   return (
     <>
       {[
@@ -90,6 +104,7 @@ function NavLinks() {
         <Link
           key={href}
           href={href}
+          aria-current={pathname === href ? 'page' : undefined}
           className="text-gray-700 hover:text-primary font-medium transition duration-150"
         >
           {label}
@@ -106,6 +121,7 @@ function NavLinks() {
 
 function MobileNavLinks({ onClick }: { onClick: () => void }) {
   const { status } = useSession();
+  const pathname = usePathname();
   return (
     <div className="flex flex-col space-y-4">
       {[
@@ -117,6 +133,7 @@ function MobileNavLinks({ onClick }: { onClick: () => void }) {
         <Link
           key={href}
           href={href}
+          aria-current={pathname === href ? 'page' : undefined}
           className="text-gray-800 hover:text-primary font-medium"
           onClick={onClick}
         >

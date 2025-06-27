@@ -1,48 +1,13 @@
-//app/layout.tsx
+import './globals.css';
+import type { ReactNode } from 'react';
 
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
-import "./globals.css";
-import NavBar from "@/components/NavBar";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"
-import Providers from '@/components/Providers'
+export const metadata = { title: 'My-Bills', description: 'AI Bills Tracker' };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "IA-Budget",
-  description: "Aplicación de gestión de gastos con IA",
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} font-sans bg-secondary text-gray-900`}
-      >
-        <Providers>
-          <NavBar />
-          <main className="min-h-screen">{children}</main>
-        </Providers>
-        <ToastContainer/>
+    <html lang="es" suppressHydrationWarning>
+      <body className="font-sans bg-secondary text-gray-900 min-h-screen">
+        {children}
       </body>
     </html>
   );
