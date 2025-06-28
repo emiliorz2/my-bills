@@ -6,6 +6,7 @@ import { useSWRConfig } from 'swr';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import GoBackButton from '@/components/ui/GoBackButton';
+import BackgroundGlobe from '@/components/BackgroundGlobe';
 
 export default function NewBillPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -88,12 +89,12 @@ export default function NewBillPage() {
   };
 
   const containerClass =
-    'max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md flex flex-col gap-6';
+    'card w-full max-w-md sm:max-w-xl mx-auto p-6 space-y-4 relative z-10';
 
   return (
     <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden flex items-center justify-center">
-      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('/globe.svg')] bg-repeat" />
-      <div className={`${containerClass} relative z-10`}>
+      <BackgroundGlobe />
+      <div className={containerClass}>
         <GoBackButton />
 
         <h1 className="text-2xl font-bold text-primary text-center">
@@ -103,13 +104,13 @@ export default function NewBillPage() {
         {step === 'method' && (
           <div className="flex flex-col gap-4">
             <button
-              className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-md"
+              className="btn-primary"
               onClick={() => setStep('text')}
             >
               Registrar por texto
             </button>
             <button
-              className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-md"
+              className="btn-primary"
               onClick={() => setStep('image')}
             >
               Subir o arrastrar imagen
@@ -123,12 +124,12 @@ export default function NewBillPage() {
             <textarea
               rows={4}
               placeholder="Ej: 5000 colones a pulpería"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="input"
               value={textInput}
               onChange={(e) => setTextInput(e.target.value)}
             />
             <button
-              className="mt-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded"
+              className="btn-primary mt-2"
               onClick={handleSubmitText}
               disabled={loading || !textInput.trim()}
             >
@@ -191,10 +192,8 @@ export default function NewBillPage() {
             <button
               onClick={handleUpload}
               disabled={!file || loading}
-              className={`mt-3 w-full px-4 py-2 rounded text-white font-medium transition ${
-                loading || !file
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-primary hover:bg-primary/90'
+              className={`btn-primary w-full mt-3 ${
+                loading || !file ? 'cursor-not-allowed opacity-50' : ''
               }`}
             >
               {loading ? 'Procesando...' : 'Subir y procesar'}

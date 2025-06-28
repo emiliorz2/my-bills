@@ -5,6 +5,7 @@ import MainContent from "@/components/MainContent";
 import useBills from "@/src/hooks/useBills";
 import useUser from "@/src/hooks/useUser";
 import useSettings from "@/src/hooks/useSettings";
+import BackgroundGlobe from '@/components/BackgroundGlobe';
 
 export default function Home() {
   const { bills } = useBills();
@@ -27,8 +28,8 @@ export default function Home() {
   const progress = budget > 0 ? Math.min((totalThisMonth / budget) * 100, 100) : 0;
 
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('/globe.svg')] bg-repeat" />
+    <main className="relative flex flex-col items-center justify-center min-h-screen px-4 py-8 sm:py-16 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+      <BackgroundGlobe />
       <section className="relative max-w-3xl text-center space-y-6 z-10">
         <div className="space-y-1">
           <h1 className="text-4xl sm:text-5xl font-extrabold text-primary">
