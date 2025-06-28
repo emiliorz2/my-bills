@@ -1,3 +1,6 @@
+// app/api/auth/[...nextauth]/route.ts
+//
+// Usado por app/login/page.tsx y app/logout/page.tsx a través de NextAuth
 import NextAuth from 'next-auth'
 import type { NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
