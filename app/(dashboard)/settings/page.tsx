@@ -48,7 +48,7 @@ export default function SettingsPage() {
       <GoBackButton />
       <h1 className="text-3xl font-bold text-primary">Configuración</h1>
 
-      <section className="space-y-4">
+      <section className="card w-full max-w-md sm:max-w-xl mx-auto p-6 space-y-4 relative z-10">
         <h2 className="text-xl font-semibold text-gray-800">Ajustes financieros</h2>
         <div className="space-y-2">
           <label htmlFor="budget" className="font-medium text-gray-800 block">
@@ -59,7 +59,7 @@ export default function SettingsPage() {
             type="number"
             value={budget}
             onChange={(e) => setBudget(parseInt(e.target.value))}
-            className="border border-gray-300 px-3 py-2 rounded-md w-full"
+            className="input"
           />
         </div>
         <div className="space-y-2">
@@ -70,7 +70,7 @@ export default function SettingsPage() {
             id="currency"
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
-            className="border border-gray-300 px-3 py-2 rounded-md w-full"
+            className="input"
           >
             <option value="CRC">CRC</option>
             <option value="USD">USD</option>
@@ -85,11 +85,11 @@ export default function SettingsPage() {
             type="number"
             value={rate}
             onChange={(e) => setRate(parseFloat(e.target.value))}
-            className="border border-gray-300 px-3 py-2 rounded-md w-full"
+            className="input"
           />
         </div>
         <button
-          className="px-4 py-2 bg-primary text-white rounded-md disabled:opacity-50 hover:bg-primary/90 active:scale-95 transition-transform"
+          className="btn-primary"
           onClick={handleSave}
           disabled={isLoading}
         >

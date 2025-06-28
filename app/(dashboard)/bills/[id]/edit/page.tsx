@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import BackgroundGlobe from '@/components/BackgroundGlobe';
 
 interface Expense {
   id: number;
@@ -89,8 +90,8 @@ export default function EditBillPage() {
 
   return (
     <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('/globe.svg')] bg-repeat" />
-      <section className="relative max-w-xl mx-auto z-10 bg-white rounded-xl shadow p-6 space-y-4">
+      <BackgroundGlobe />
+      <section className="card w-full max-w-md sm:max-w-xl mx-auto p-6 space-y-4 relative z-10">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-primary text-center mb-4">Editar Factura #{id}</h1>
 
       <div className="space-y-4">
@@ -101,7 +102,7 @@ export default function EditBillPage() {
             name="vendor"
             value={form.vendor}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded-md"
+            className="input"
           />
         </div>
 
@@ -111,7 +112,7 @@ export default function EditBillPage() {
             name="description"
             value={form.description}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded-md"
+            className="input"
           />
         </div>
 
@@ -122,7 +123,7 @@ export default function EditBillPage() {
             name="total"
             value={form.total}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded-md"
+            className="input"
           />
         </div>
 
@@ -133,7 +134,7 @@ export default function EditBillPage() {
             name="currency"
             value={form.currency}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded-md"
+            className="input"
           />
         </div>
 
@@ -143,7 +144,7 @@ export default function EditBillPage() {
             name="category"
             value={form.category}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded-md"
+            className="input"
           >
             <option value="">Seleccione una categoría</option>
             {CATEGORIES.map((cat) => (
@@ -156,7 +157,7 @@ export default function EditBillPage() {
 
         <button
           onClick={handleSubmit}
-          className="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-md mt-4 transition"
+          className="btn-primary w-full mt-4"
         >
           Guardar Cambios
         </button>

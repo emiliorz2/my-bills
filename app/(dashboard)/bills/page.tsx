@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import BillList from '@/components/bills/BillList';
 import BillsFilters from '@/components/bills/BillsFilters';
 import FloatingButton from '@/components/ui/FloatingButton';
+import BackgroundGlobe from '@/components/BackgroundGlobe';
 import useBills from '@/src/hooks/useBills';
 
 export default function BillsPage() {
@@ -57,7 +58,7 @@ export default function BillsPage() {
 
   return (
     <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('/globe.svg')] bg-repeat" />
+      <BackgroundGlobe />
       <section className="relative max-w-5xl mx-auto space-y-6 z-10">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-primary text-center">📄 Facturas registradas</h1>
 
