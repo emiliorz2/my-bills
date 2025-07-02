@@ -43,7 +43,7 @@ export default function BillsFilters({
           id="filter-category"
           value={category}
           onChange={(e) => onCategoryChange(e.target.value)}
-          className="border border-gray-300 px-3 py-2 rounded-md"
+          className="input"
         >
           <option value="">Todas</option>
           {CATEGORIES.map((cat) => (
@@ -61,7 +61,7 @@ export default function BillsFilters({
           type="text"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="border border-gray-300 px-3 py-2 rounded-md"
+          className="input"
           placeholder="Proveedor o descripción"
         />
       </div>
@@ -73,7 +73,7 @@ export default function BillsFilters({
           type="date"
           value={startDate}
           onChange={(e) => onStartDateChange(e.target.value)}
-          className="border border-gray-300 px-3 py-2 rounded-md"
+          className="input"
         />
       </div>
 
@@ -84,7 +84,7 @@ export default function BillsFilters({
           type="date"
           value={endDate}
           onChange={(e) => onEndDateChange(e.target.value)}
-          className="border border-gray-300 px-3 py-2 rounded-md"
+          className="input"
         />
       </div>
     </div>

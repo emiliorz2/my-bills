@@ -4,6 +4,7 @@
 import useSWR from 'swr';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
+import BackgroundGlobe from '@/components/BackgroundGlobe';
 
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
@@ -31,13 +32,13 @@ export default function AnalyticsPage() {
 
   return (
     <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('/globe.svg')] bg-repeat" />
+      <BackgroundGlobe />
       <section className="relative max-w-4xl mx-auto space-y-6 z-10">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-primary text-center">📊 Analítica</h1>
 
         <button
           onClick={handleExport}
-          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md shadow"
+          className="btn-green"
         >
           📥 Exportar Excel
         </button>

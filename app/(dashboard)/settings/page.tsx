@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import useSettings from '@/src/hooks/useSettings';
 import { toast } from 'react-toastify';
 
+import BackgroundGlobe from '@/components/BackgroundGlobe';
+
 export default function SettingsPage() {
   const { settings, saveSettings, isLoading } = useSettings();
   const [budget, setBudget] = useState(settings?.monthlyBudget ?? 0);
@@ -44,9 +46,11 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className="max-w-2xl mx-auto p-6 space-y-8">
-      <GoBackButton />
-      <h1 className="text-3xl font-bold text-primary">Configuración</h1>
+    <main className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+      <BackgroundGlobe />
+      <div className="card w-full max-w-md sm:max-w-xl mx-auto p-6 space-y-4 relative z-10">
+        <GoBackButton />
+        <h1 className="text-3xl font-bold text-primary">Configuración</h1>
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold text-gray-800">Ajustes financieros</h2>
@@ -59,7 +63,7 @@ export default function SettingsPage() {
             type="number"
             value={budget}
             onChange={(e) => setBudget(parseInt(e.target.value))}
-            className="border border-gray-300 px-3 py-2 rounded-md w-full"
+            className="input"
           />
         </div>
         <div className="space-y-2">
@@ -70,7 +74,7 @@ export default function SettingsPage() {
             id="currency"
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
-            className="border border-gray-300 px-3 py-2 rounded-md w-full"
+            className="input"
           >
             <option value="CRC">CRC</option>
             <option value="USD">USD</option>
@@ -85,11 +89,11 @@ export default function SettingsPage() {
             type="number"
             value={rate}
             onChange={(e) => setRate(parseFloat(e.target.value))}
-            className="border border-gray-300 px-3 py-2 rounded-md w-full"
+            className="input"
           />
         </div>
         <button
-          className="px-4 py-2 bg-primary text-white rounded-md disabled:opacity-50 hover:bg-primary/90 active:scale-95 transition-transform"
+          className="btn-primary"
           onClick={handleSave}
           disabled={isLoading}
         >
@@ -109,6 +113,7 @@ export default function SettingsPage() {
           funcionalidad.
         </p>
       </section>
+      </div>
     </main>
   );
 }
