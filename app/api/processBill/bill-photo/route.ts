@@ -35,6 +35,7 @@ export async function POST(req: Request) {
     // Solicita a OpenAI que extraiga los datos de la factura
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
+      response_format: { type: 'json_object' },
       messages: [
         {
           role: 'user',
@@ -89,18 +90,15 @@ Devuelve SOLO un JSON con esta estructura con la información extraída:
       ],
     });
 
-    // Respuesta en texto de OpenAI
+    // Respuesta en JSON de OpenAI
     const raw = completion.choices[0].message.content ?? '';
     console.log('🔍 GPT respuesta:', raw);
 
-    // Limpia delimitadores de código
-    const cleaned = raw.replace(/```json|```/g, '').trim();
-
     let parsedJSON;
     try {
-      parsedJSON = JSON.parse(cleaned);
+      parsedJSON = JSON.parse(raw);
     } catch (err) {
-      console.error('❌ JSON malformado:', err, cleaned);
+      console.error('❌ JSON malformado:', err, raw);
       return NextResponse.json(
         { success: false, error: 'Formato de respuesta inválido del modelo' },
         { status: 500 }

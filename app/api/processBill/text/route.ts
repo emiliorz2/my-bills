@@ -74,15 +74,25 @@ Texto: ${message}
     // Envía el texto a OpenAI para extraer la información
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
+      response_format: { type: 'json_object' },
       messages: [{ role: 'user', content: prompt }],
       temperature: 0,
     });
 
-    // Texto devuelto por OpenAI
+    // Respuesta de OpenAI en JSON
     const raw = completion.choices[0].message.content ?? '';
     console.log('🔍 Respuesta cruda de OpenAI:', raw);
 
-    const parsedJSON = JSON.parse(raw);
+    let parsedJSON;
+    try {
+      parsedJSON = JSON.parse(raw);
+    } catch (err) {
+      console.error('❌ JSON malformado:', err, raw);
+      return NextResponse.json(
+        { success: false, error: 'Formato de respuesta inválido del modelo' },
+        { status: 500 }
+      );
+    }
     // Valida el esquema recibido
     const result = ExpenseWithDetailsSchema.safeParse(parsedJSON);
     if (!result.success) {
