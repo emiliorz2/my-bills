@@ -36,14 +36,14 @@ export default function BillsFilters({
   onEndDateChange,
 }: BillsFiltersProps) {
   return (
-    <div className="mb-4 flex flex-wrap gap-4 items-end">
+    <div className="mb-4 flex flex-wrap gap-4 items-end text-gray-800">
       <div>
-        <label htmlFor="filter-category" className="mr-2 font-medium">Filtrar por categoría:</label>
+        <label htmlFor="filter-category" className="mr-2 font-medium text-gray-800">Filtrar por categoría:</label>
         <select
           id="filter-category"
           value={category}
           onChange={(e) => onCategoryChange(e.target.value)}
-          className="border border-gray-300 px-3 py-2 rounded-md"
+          className="border border-gray-300 px-3 py-2 rounded-md text-gray-800"
         >
           <option value="">Todas</option>
           {CATEGORIES.map((cat) => (
@@ -55,36 +55,36 @@ export default function BillsFilters({
       </div>
 
       <div>
-        <label htmlFor="filter-search" className="mr-2 font-medium">Buscar:</label>
+        <label htmlFor="filter-search" className="mr-2 font-medium text-gray-800">Buscar:</label>
         <input
           id="filter-search"
           type="text"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="border border-gray-300 px-3 py-2 rounded-md"
+          className="border border-gray-300 px-3 py-2 rounded-md text-gray-800"
           placeholder="Proveedor o descripción"
         />
       </div>
 
       <div>
-        <label htmlFor="filter-from" className="mr-2 font-medium">Desde:</label>
+        <label htmlFor="filter-from" className="mr-2 font-medium text-gray-800">Desde:</label>
         <input
           id="filter-from"
           type="date"
           value={startDate}
           onChange={(e) => onStartDateChange(e.target.value)}
-          className="border border-gray-300 px-3 py-2 rounded-md"
+          className="border border-gray-300 px-3 py-2 rounded-md text-gray-800"
         />
       </div>
 
       <div>
-        <label htmlFor="filter-to" className="mr-2 font-medium">Hasta:</label>
+        <label htmlFor="filter-to" className="mr-2 font-medium text-gray-800">Hasta:</label>
         <input
           id="filter-to"
           type="date"
           value={endDate}
           onChange={(e) => onEndDateChange(e.target.value)}
-          className="border border-gray-300 px-3 py-2 rounded-md"
+          className="border border-gray-300 px-3 py-2 rounded-md text-gray-800"
         />
       </div>
     </div>

@@ -45,7 +45,12 @@ export default function LoginPage() {
           className="w-full border p-2 rounded"
           required
         />
-        <button type="submit" className="w-full bg-primary text-white py-2 rounded">Ingresar</button>
+        <button
+          type="submit"
+          className="w-full bg-primary text-white py-2 rounded hover:bg-primary/90 active:scale-95 transition-transform"
+        >
+          Ingresar
+        </button>
       </form>
     </main>
   )
