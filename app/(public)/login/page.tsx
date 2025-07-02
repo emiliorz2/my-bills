@@ -34,7 +34,7 @@ export default function LoginPage() {
           placeholder="Email"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          className="w-full border p-2 rounded"
+          className="input"
           required
         />
         <input
@@ -42,12 +42,12 @@ export default function LoginPage() {
           placeholder="Contraseña"
           value={password}
           onChange={e => setPassword(e.target.value)}
-          className="w-full border p-2 rounded"
+          className="input"
           required
         />
         <button
           type="submit"
-          className="w-full bg-primary text-white py-2 rounded hover:bg-primary/90 active:scale-95 transition-transform"
+          className="btn-primary w-full"
         >
           Ingresar
         </button>

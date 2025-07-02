@@ -33,7 +33,7 @@ export default function MainContent() {
 
   return (
     <motion.section
-      className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+      className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >

@@ -10,7 +10,7 @@ interface BillItemProps {
 
 export default function BillItem({ bill, onEdit, onDelete }: BillItemProps) {
   return (
-    <li className="border border-gray-200 rounded-xl p-5 shadow-sm bg-white hover:shadow-md transition">
+    <li className="relative card border border-gray-200 p-5 hover:shadow-md transition divide-y xs:divide-y-0">
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-lg font-semibold text-gray-800">
           {bill.vendor || 'Proveedor desconocido'}
