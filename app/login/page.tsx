@@ -47,7 +47,7 @@ export default function LoginPage() {
         />
         <button
           type="submit"
-          className="w-full bg-primary text-white py-2 rounded hover:bg-primary/90 active:scale-95 transition-transform"
+          className="w-full bg-primary text-white py-2 rounded hover:bg-primary/90 active:scale-95 transition"
         >
           Ingresar
         </button>
