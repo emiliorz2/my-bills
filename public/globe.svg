@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" stroke="#cccccc" stroke-width="1.5" fill="none" stroke-linecap="round">
+  <!-- Contorno del globo -->
+  <circle cx="600" cy="600" r="550" />
+
+  <!-- Paralelos (latitud) -->
+  <ellipse cx="600" cy="600" rx="550" ry="275" />
+  <ellipse cx="600" cy="600" rx="550" ry="137.5" />
+
+  <!-- Meridianos (longitud) -->
+  <ellipse cx="600" cy="600" rx="550" ry="275" transform="rotate(90 600 600)" />
+  <ellipse cx="600" cy="600" rx="550" ry="137.5" transform="rotate(90 600 600)" />
+</svg>
