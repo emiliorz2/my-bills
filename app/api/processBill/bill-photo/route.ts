@@ -5,20 +5,12 @@ import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { ExpenseWithDetailsSchema } from '@/src/schema';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { getDemoUser } from '@/lib/demo-user';
 
 // Procesa una imagen de factura con OpenAI y guarda el gasto
 export async function POST(req: Request) {
   try {
-    // Verifica autenticación
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'No autorizado' },
-        { status: 401 }
-      );
-    }
+    const demoUser = await getDemoUser();
 
     // Extrae la imagen enviada en el formulario
     const formData = await req.formData();
@@ -135,7 +127,7 @@ Devuelve SOLO un JSON con esta estructura con la información extraída:
         currency: data.moneda,
         expenseType: data.tipo,
         category: data.categoria,
-        userId: +session.user.id,
+        userId: demoUser.id,
       },
     });
 

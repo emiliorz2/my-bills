@@ -6,8 +6,7 @@
 import { NextResponse } from 'next/server';
 import type { RouteHandlerContext } from 'next';
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { getDemoUser } from '@/lib/demo-user';
 
 // Devuelve un gasto específico para edición
 // Utilizado en app/bills/[id]/edit/page.tsx
@@ -24,17 +23,12 @@ export async function GET(
     return NextResponse.json({ success: false, message: 'ID inválido' }, { status: 400 });
   }
 
-  // Verifica autenticación
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
-  }
-  const userId = Number((session.user as { id: string }).id);
+  const demoUser = await getDemoUser();
 
   try {
     // Busca el gasto junto con su fuente y detalles
     const expense = await prisma.expense.findFirst({
-      where: { id, userId },
+      where: { id, userId: demoUser.id },
       include: {
         invoiceDetails: true,
         source: true,
@@ -67,16 +61,12 @@ export async function PUT(
   }
 
   const body = await request.json();
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
-  }
-  const userId = Number((session.user as { id: string }).id);
+  const demoUser = await getDemoUser();
 
   try {
     // Actualiza el registro en base al cuerpo recibido
     const updated = await prisma.expense.updateMany({
-      where: { id, userId },
+      where: { id, userId: demoUser.id },
       data: {
         vendor: body.vendor,
         description: body.description,
@@ -93,7 +83,7 @@ export async function PUT(
 
     // Obtiene el registro actualizado con sus relaciones
     const refreshed = await prisma.expense.findFirst({
-      where: { id, userId },
+      where: { id, userId: demoUser.id },
       include: { invoiceDetails: true, source: true }
     })
 
@@ -113,23 +103,18 @@ export async function DELETE(
   context: RouteHandlerContext<{ id: string }>
 ) {
   try {
-    // Verifica autenticación
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 });
-    }
+    const demoUser = await getDemoUser();
 
     // Id del gasto a eliminar
     const { id: idRaw } = await context.params;
     const id = Number(idRaw);
 
-    const userId = Number((session.user as { id: string }).id);
     if (isNaN(id)) {
       return NextResponse.json({ success: false, error: 'ID inválido' }, { status: 400 });
     }
 
     // Comprueba existencia
-    const expense = await prisma.expense.findFirst({ where: { id, userId } });
+    const expense = await prisma.expense.findFirst({ where: { id, userId: demoUser.id } });
 
     if (!expense) {
       return NextResponse.json({ success: false, error: 'Factura no encontrada' }, { status: 404 });
