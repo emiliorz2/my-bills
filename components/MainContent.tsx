@@ -30,10 +30,30 @@ export default function MainContent() {
   };
 
   const actions = [
-    { title: 'Ingresar Factura', icon: '➕', action: () => router.push('/new-bill') },
-    { title: 'Ver Facturas', icon: '📄', action: () => router.push('/bills') },
-    { title: 'Reportes', icon: '📊', action: () => router.push('/analytics') },
-    { title: 'Exportar Datos', icon: '📤', action: handleExport },
+    {
+      title: 'Registrar gasto',
+      description: 'Carga una factura o registra un pago manual.',
+      icon: '➕',
+      action: () => router.push('/new-bill'),
+    },
+    {
+      title: 'Ver facturas',
+      description: 'Filtra y organiza el historial completo.',
+      icon: '📄',
+      action: () => router.push('/bills'),
+    },
+    {
+      title: 'Analítica',
+      description: 'Visualiza tu progreso y exporta reportes.',
+      icon: '📊',
+      action: () => router.push('/analytics'),
+    },
+    {
+      title: 'Exportar datos',
+      description: 'Descarga un Excel con tus registros.',
+      icon: '📤',
+      action: handleExport,
+    },
   ];
 
   return (
@@ -42,16 +62,24 @@ export default function MainContent() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      {actions.map(({ title, icon, action }) => (
+      {actions.map(({ title, description, icon, action }) => (
         <motion.div
           key={title}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.97 }}
           onClick={action}
-          className="cursor-pointer select-none p-6 rounded-xl shadow-lg bg-white/60 backdrop-blur-md flex flex-col items-center justify-center space-y-2"
+          className="cursor-pointer select-none rounded-2xl border border-white/80 bg-white/80 p-6 shadow-sm backdrop-blur-md transition hover:-translate-y-1"
         >
-          <span className="text-4xl">{icon}</span>
-          <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">{icon}</span>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+                <p className="text-sm text-gray-500">{description}</p>
+              </div>
+            </div>
+            <span className="text-gray-400">➜</span>
+          </div>
         </motion.div>
       ))}
     </motion.section>

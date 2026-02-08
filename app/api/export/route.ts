@@ -6,20 +6,14 @@
 
 import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '../auth/[...nextauth]/route'
+import { getDemoUser } from '@/lib/demo-user'
 
 export async function GET() {
-  // Verifica que el usuario esté autenticado
-  const session = await getServerSession(authOptions)
-  if (!session) {
-    return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 })
-  }
-  const userId = Number((session.user as { id: string }).id)
+  const demoUser = await getDemoUser()
   try {
     // Obtiene todos los gastos junto con sus detalles e imágenes
     const expenses = await prisma.expense.findMany({
-      where: { userId },
+      where: { userId: demoUser.id },
       include: { invoiceDetails: true, source: true },
     })
     const invoiceDetails = expenses.flatMap(e => e.invoiceDetails)

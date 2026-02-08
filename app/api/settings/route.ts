@@ -5,31 +5,23 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import type { Prisma } from '@/lib/generated/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '../auth/[...nextauth]/route'
+import { getDemoUser } from '@/lib/demo-user'
 
 // Obtiene la configuración del usuario actual
 export async function GET() {
-  // Verifica autenticación
-  const session = await getServerSession(authOptions)
-  if (!session) {
-    return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 })
-  }
   // Busca la configuración única de este usuario
-  const userId = Number((session.user as { id: string }).id)
+  const demoUser = await getDemoUser()
+  const userId = demoUser.id
   const setting = await prisma.setting.findUnique({ where: { userId } })
   return NextResponse.json({ success: true, data: setting })
 }
 
 // Actualiza o crea la configuración del usuario
 export async function PUT(request: Request) {
-  const session = await getServerSession(authOptions)
-  if (!session) {
-    return NextResponse.json({ success: false, error: 'No autorizado' }, { status: 401 })
-  }
   // Datos enviados por el cliente
   const body = await request.json()
-  const userId = Number((session.user as { id: string }).id)
+  const demoUser = await getDemoUser()
+  const userId = demoUser.id
   const { preferredCurrency, exchangeRate, monthlyBudget } = body
   try {
     // Campos a actualizar

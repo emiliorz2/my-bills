@@ -6,9 +6,8 @@
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
 import { z } from 'zod';
+import { getDemoUser } from '@/lib/demo-user';
 
 const SourceSchema = z.object({
   id: z.number().optional(),
@@ -51,14 +50,7 @@ const BodySchema = z.object({
 // Crea un gasto manual (actualmente no utilizado directamente desde el cliente)
 export async function POST(request: Request) {
   try {
-    // Verifica que el usuario esté autenticado
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'No autorizado' },
-        { status: 401 }
-      );
-    }
+    const demoUser = await getDemoUser();
 
     // Extrae y valida el cuerpo de la petición
     const json = await request.json();
@@ -85,7 +77,7 @@ export async function POST(request: Request) {
     const newExpense = await prisma.expense.create({
       data: {
         sourceId: newSource.id,
-        userId: Number(session.user.id),
+        userId: demoUser.id,
         vendor: expense.vendor,
         description: expense.description,
         date: new Date(expense.date),
@@ -108,20 +100,11 @@ export async function POST(request: Request) {
 // Llamado desde src/hooks/useBills.ts
 export async function GET() {
   try {
-    // Comprueba que el usuario esté autenticado
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'No autorizado' },
-        { status: 401 }
-      );
-    }
-
-    const userId = Number((session.user as { id: string }).id);
+    const demoUser = await getDemoUser();
 
     // Obtiene todos los gastos ordenados por fecha y con sus relaciones
     const expenses = await prisma.expense.findMany({
-      where: { userId },
+      where: { userId: demoUser.id },
       orderBy: { date: 'desc' },
       include: {
         source: true,
@@ -143,21 +126,13 @@ export async function GET() {
 // Llamado desde src/hooks/useBills.ts
 export async function DELETE(request: Request) {
   try {
-    // Verifica autenticación
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'No autorizado' },
-        { status: 401 }
-      );
-    }
+    const demoUser = await getDemoUser();
 
     // Obtiene el ID a eliminar
     const { id } = await request.json();
-    const userId = Number((session.user as { id: string }).id);
 
     // Elimina el gasto que coincida con el usuario
-    const deleted = await prisma.expense.deleteMany({ where: { id, userId } });
+    const deleted = await prisma.expense.deleteMany({ where: { id, userId: demoUser.id } });
     if (deleted.count === 0) {
       return NextResponse.json({ success: false, error: 'No encontrado' }, { status: 404 });
     }
@@ -176,14 +151,7 @@ export async function DELETE(request: Request) {
 // Utilizado en app/bills/[id]/edit/page.tsx
 export async function PUT(request: Request) {
   try {
-    // Verifica sesión del usuario
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'No autorizado' },
-        { status: 401 }
-      );
-    }
+    const demoUser = await getDemoUser();
 
     // Valida el cuerpo y extrae datos
     const json = await request.json();
@@ -195,10 +163,9 @@ export async function PUT(request: Request) {
       );
     }
     const { id, source, expense } = parseResult.data;
-    const userId = Number((session.user as { id: string }).id);
 
     // Comprueba que el gasto exista y pertenezca al usuario
-    const existing = await prisma.expense.findFirst({ where: { id, userId } });
+    const existing = await prisma.expense.findFirst({ where: { id, userId: demoUser.id } });
     if (!existing) {
       return NextResponse.json({ success: false, error: 'No encontrado' }, { status: 404 });
     }
@@ -216,10 +183,10 @@ export async function PUT(request: Request) {
 
     // Luego actualiza el gasto
     const updatedExpense = await prisma.expense.updateMany({
-      where: { id, userId },
+      where: { id, userId: demoUser.id },
       data: {
         sourceId: updatedSource.id,
-        userId,
+        userId: demoUser.id,
         vendor: expense.vendor,
         description: expense.description,
         date: new Date(expense.date),
@@ -236,7 +203,7 @@ export async function PUT(request: Request) {
 
     // Devuelve la versión actualizada del gasto
     const refreshed = await prisma.expense.findFirst({
-      where: { id, userId },
+      where: { id, userId: demoUser.id },
       include: { source: true, invoiceDetails: true }
     })
 

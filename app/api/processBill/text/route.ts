@@ -6,20 +6,12 @@ import { openai } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { ExpenseWithDetailsSchema } from '@/src/schema';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { getDemoUser } from '@/lib/demo-user';
 
 // Procesa un mensaje de texto con OpenAI y registra el gasto
 export async function POST(req: Request) {
   try {
-    // Verifica autenticación
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'No autorizado' },
-        { status: 401 }
-      );
-    }
+    const demoUser = await getDemoUser();
 
     const { message } = await req.json();
 
@@ -122,7 +114,7 @@ Texto: ${message}
         currency: data.moneda,
         expenseType: data.tipo,
         category: data.categoria ?? 'OTHER',
-        userId: +session.user.id,
+        userId: demoUser.id,
       },
     });
 

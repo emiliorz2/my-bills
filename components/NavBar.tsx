@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -31,6 +30,15 @@ export default function Header() {
             <nav className="hidden md:flex space-x-6">
               <NavLinks />
             </nav>
+
+            <div className="hidden md:flex">
+              <Link
+                href="/new-bill"
+                className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90"
+              >
+                Nuevo gasto
+              </Link>
+            </div>
 
             {/* Mobile menu button */}
             <div className="md:hidden">
@@ -86,7 +94,6 @@ export default function Header() {
 }
 
 function NavLinks() {
-  const { status } = useSession();
   const pathname = usePathname();
   return (
     <>
@@ -105,17 +112,11 @@ function NavLinks() {
           {label}
         </Link>
       ))}
-      {status === 'authenticated' ? (
-        <Link href="/logout" className="text-gray-700 hover:text-primary font-medium">Salir</Link>
-      ) : (
-        <Link href="/login" className="text-gray-700 hover:text-primary font-medium">Ingresar</Link>
-      )}
     </>
   );
 }
 
 function MobileNavLinks({ onClick }: { onClick: () => void }) {
-  const { status } = useSession();
   const pathname = usePathname();
   return (
     <div className="flex flex-col space-y-4">
@@ -135,11 +136,13 @@ function MobileNavLinks({ onClick }: { onClick: () => void }) {
           {label}
         </Link>
       ))}
-      {status === 'authenticated' ? (
-        <Link href="/logout" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Salir</Link>
-      ) : (
-        <Link href="/login" className="text-gray-800 hover:text-primary font-medium" onClick={onClick}>Ingresar</Link>
-      )}
+      <Link
+        href="/new-bill"
+        className="text-gray-800 hover:text-primary font-medium"
+        onClick={onClick}
+      >
+        Nuevo gasto
+      </Link>
     </div>
   );
 }
